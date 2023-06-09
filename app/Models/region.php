@@ -11,10 +11,7 @@ class region extends Model
     protected $table = "regions";
     protected $fillable = [
         'name',
-        'lon',
-        'lat',
-        'weather',
-        'user_id'
+
 
     ];
 
@@ -23,9 +20,6 @@ class region extends Model
          *
          * @return \Illuminate\Database\Eloquent\Relations\HasMany
          */
-        public function users(): HasMany
-        {
-            return $this->hasMany(User::class);
-        }
+
     }
 

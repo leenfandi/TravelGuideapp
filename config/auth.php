@@ -44,6 +44,20 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+        'guide-api' => [
+
+            'driver' => 'jwt',
+
+            'provider' => 'guides',
+            'hash' => false,
+        ],
+        'admin-api' => [
+
+            'driver' => 'jwt',
+
+            'provider' => 'admins',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -69,10 +83,15 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'guides' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Guide::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*

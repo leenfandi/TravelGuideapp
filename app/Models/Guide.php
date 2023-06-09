@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class Guide extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -22,7 +22,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'number',
+        'gender',
+        'age',
     ];
 
     /**
@@ -68,6 +69,6 @@ class User extends Authenticatable implements JWTSubject
          *
          * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
          */
-       
+
     }
 
