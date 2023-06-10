@@ -13,10 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('regions', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('region_id');
             $table->string('name');
+            $table->string('type');
+            $table->text('description');
+           // $table->double('distance');
+           // $table->string('time');
+            $table->integer('price');
 
+            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regions');
+        Schema::dropIfExists('activities');
     }
 };
