@@ -15,7 +15,7 @@ class Image extends Model
         'url'
     ];
 
-    public function activity() : BelongsTo
+    public function activity()
     {
         return $this->belongsTo(Activity::class);
     }

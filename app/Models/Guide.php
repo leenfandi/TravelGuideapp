@@ -69,6 +69,9 @@ class Guide extends Authenticatable implements JWTSubject
          *
          * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
          */
-
+       public function comments()
+        {
+            return $this->hasMany(Comment::class);
+        }
     }
 

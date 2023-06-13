@@ -57,17 +57,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-   /**
-     * Get the user associated with the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
 
-   /**
-         * Get the user that owns the User
-         *
-         * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-         */
-       
+      /**
+       * Get all of the comments for the User
+       *
+       * @return \Illuminate\Database\Eloquent\Relations\HasMany
+       */
+      public function comments(): HasMany
+      {
+          return $this->hasMany(Comment::class);
+      }
     }
 

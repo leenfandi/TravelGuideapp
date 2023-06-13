@@ -30,7 +30,7 @@ return [
 
     'disks' => [
 
-        'local' => [
+        'images' => [
             'driver' => 'local',
             'root' => storage_path('app'),
             'throw' => false,

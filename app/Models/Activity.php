@@ -12,6 +12,7 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
+
         'region_id',
         'name',
         'type',
@@ -29,6 +30,10 @@ class Activity extends Model
     public function images() : HasMany
     {
         return $this->hasMany(Image::class);
+    }
+    public function comments()
+    {
+       return $this->hasMany(Comment::class);
     }
 
 }

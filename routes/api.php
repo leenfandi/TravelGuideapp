@@ -7,6 +7,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\GuideAuthController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ImageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -59,7 +61,11 @@ Route::group([
 
     Route::post('addguide',[AdminAuthController::class,'addguide']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
-
+    Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
+    Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
+    Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
+    Route::post('addimage',[ImageController::class, 'Addimage']);
+    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
 });
 
 
@@ -69,8 +75,10 @@ Route::group([
 
 ], function () {
 
-
-
+    Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
+    Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
+    Route::post('addimage',[ImageController::class, 'Addimage']);
+    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
 });
 
 
@@ -83,5 +91,9 @@ Route::middleware('auth:api')->group(function ()
     {
 
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
+       Route::post('comment/{activity_id}',[CommentController::class, 'store']);
+       Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
+
+
 
     });
