@@ -19,15 +19,20 @@ class ImageController extends Controller
 
        $image->activity_id = $input['activity_id'];
 
-        if ($request->url && $request->url->isValid()){
+        if (!$request->has('url')){
+            return response()->json(['message' => 'Missing file'], 422);}
 
-              $photo=$request->url;
+            
+            if ($request->url && $request->url->isValid()){
 
-          $photoname=time().'.jpg';
-          \Storage::disk('images')->put($photoname,base64_decode($photo));
-          $path="public/images/activity_images/$photoname";
-          $image->url = $path;
-          }
+              $file_extension = $request->url->extension();
+                $file_name = time() . '.' . $file_extension;
+                $request->url->move(public_path('images/activity_images'), $file_name);
+                $path = "public/images/activity_images/$file_name";
+                $image->url = $path;
+            }
+
+
 
           $image->save();
 
@@ -36,21 +41,15 @@ class ImageController extends Controller
             'image'=>$image,
 
         ]);
-
-
-        if ($validator->fails())
-        {
-            return response()->json($validator->errors()->toJson(),400);
-        }
-
-
-        return response()->json([
-            'message'=>'Activity added successfully',
-
-        ],201);
-
-
     }
+
+
+
+
+
+
+
+
     public function add_Activity_With_Image(Request $request){
 
         $input = $request->all();
@@ -58,14 +57,16 @@ class ImageController extends Controller
 
         $images->activity_id = $input['activity_id'];
 
-         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $images->activity_id)->latest()->first();
+         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $images->activity_id)
+         ->latest()->first();
          $url = Image::select('url','activity_id')->where('activity_id' , $images->activity_id)->latest()->first();
+
 
             $formedData['your activity'][] =
             [
 
                 'url'=> $url->url,
-                'activity_id' => $url->activity->id,
+                'activity_id' => $images->activity->id,
                'region_id' => $activity->region->id ,
                'name' => $activity->name ,
                'type' => $activity ->type ,
