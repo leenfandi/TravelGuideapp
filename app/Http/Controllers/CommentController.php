@@ -57,7 +57,7 @@ class CommentController extends Controller
         }
         $comment = Comment::create([
             'message' => $request->message,
-            'activity_id' => $activity->id,
+            'activity_id' => $activity_id,
             'user_id' => Auth::guard('api')->id(),
 
         ]);
