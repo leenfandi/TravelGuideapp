@@ -16,7 +16,7 @@ class CommentController extends Controller
         $activity = Activity::where('id', $activity_id)->first();
         if ($activity) {
             $comments=Comment::with(['user'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->paginate(5);
+            ->orderBy('id','desc')->get();
 
 
                 return response()->json([
@@ -94,7 +94,7 @@ class CommentController extends Controller
         }
         $comment = Comment::create([
             'message' => $request->message,
-            'activity_id' => $activity->id,
+            'activities_id' => $activity_id,
             'guide_id' => Auth::guard('guide-api')->id(),
 
         ]);
@@ -115,7 +115,7 @@ class CommentController extends Controller
         $activity = Activity::where('id', $activity_id)->first();
         if ($activity) {
             $comments=Comment::with(['guide'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->paginate(5);
+            ->orderBy('id','desc')->get();
 
 
                 return response()->json([
@@ -157,7 +157,7 @@ public function showcomment($activity_id)
         $activity = Activity::where('id', $activity_id)->first();
         if ($activity) {
             $comments=Comment::with(['admin'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->paginate(5);
+            ->orderBy('id','desc')->get();
 
 
                 return response()->json([

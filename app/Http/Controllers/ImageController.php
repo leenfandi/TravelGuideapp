@@ -19,18 +19,14 @@ class ImageController extends Controller
 
        $image->activity_id = $input['activity_id'];
 
-        if (!$request->has('url')){
-            return response()->json(['message' => 'Missing file'], 422);}
+        if ($request->url && $request->url->isValid()){
 
-            
-            if ($request->url && $request->url->isValid()){
-
+            //  $photo=$request->url;
               $file_extension = $request->url->extension();
                 $file_name = time() . '.' . $file_extension;
                 $request->url->move(public_path('images/activity_images'), $file_name);
                 $path = "public/images/activity_images/$file_name";
                 $image->url = $path;
-            }
 
 
 
@@ -43,13 +39,19 @@ class ImageController extends Controller
         ]);
     }
 
+        if ($validator->fails())
+        {
+            return response()->json($validator->errors()->toJson(),400);
+        }
 
 
+        return response()->json([
+            'message'=>'Activity added successfully',
+
+        ],201);
 
 
-
-
-
+    }
     public function add_Activity_With_Image(Request $request){
 
         $input = $request->all();
@@ -59,19 +61,19 @@ class ImageController extends Controller
 
          $activity = Activity::select('region_id','name','type','description','price')->where('id' , $images->activity_id)
          ->latest()->first();
-         $url = Image::select('url','activity_id')->where('activity_id' , $images->activity_id)->latest()->first();
-
+        // $url = Image::select('url','activity_id')->where('activity_id' , $images->activity_id)->latest()->first();
 
             $formedData['your activity'][] =
             [
 
-                'url'=> $url->url,
+                'url'=> asset('images/activity_images/' . $this->images->url),
                 'activity_id' => $images->activity->id,
                'region_id' => $activity->region->id ,
                'name' => $activity->name ,
                'type' => $activity ->type ,
                'description' => $activity ->description,
                'price' => $activity -> price,
+
 
 
             ];
