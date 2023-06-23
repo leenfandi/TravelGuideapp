@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    //for user
     public function list($activity_id)
     {
         $activity = Activity::where('id', $activity_id)->first();
@@ -36,10 +37,11 @@ class CommentController extends Controller
         }
 
     }
+    //for user
     public function store($activity_id, Request $request)
     {
         $user_id= Auth::guard('api')->user()->id;
-        $activity = Activity::where('id', $activity_id)->first();
+        $activity = Activity::where('id', $activity_id)->get()->first();
         if ($activity) {
             $validator = validator($request->all(), [
 
@@ -57,7 +59,7 @@ class CommentController extends Controller
         }
         $comment = Comment::create([
             'message' => $request->message,
-            'activity_id' => $activity_id,
+            'activities_id' => $activity_id,
             'user_id' => Auth::guard('api')->id(),
 
         ]);
@@ -135,7 +137,21 @@ class CommentController extends Controller
         }
 
     }
-
+    //for user
+    public function deletecommentuser( ){
+        $user_id= Auth::guard('api')->user()->id;
+        $comment = Comment::find($user_id);
+        $result = $comment->delete();
+        if($result){
+            return response()->json([
+                'message'=>' A Comment Deleted Successfully'
+            ],201);
+         } else{
+            return response()->json([
+                'message'=>'Comment Not Deleted '
+            ],400);
+            }
+    }
 
   //  for admin
   public function deletecomment( $id){

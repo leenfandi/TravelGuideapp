@@ -52,22 +52,23 @@ class ImageController extends Controller
 
 
     }
-    public function add_Activity_With_Image(Request $request){
+    public function add_Activity_With_Image($activity_id){
 
-        $input = $request->all();
-        $images = new Image();
 
-        $images->activity_id = $input['activity_id'];
+         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $activity_id)
+        ->first();
+        if($activity)
+        {
+            $urls=Image::select('url')->where('activity_id',$activity_id)
+            ->orderBy('id','desc')->get();
 
-         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $images->activity_id)
-         ->latest()->first();
-        // $url = Image::select('url','activity_id')->where('activity_id' , $images->activity_id)->latest()->first();
+        }
 
             $formedData['your activity'][] =
             [
 
-                'url'=> asset('images/activity_images/' . $this->images->url),
-                'activity_id' => $images->activity->id,
+                'url'=> $urls,
+                'activity_id' => $activity_id,
                'region_id' => $activity->region->id ,
                'name' => $activity->name ,
                'type' => $activity ->type ,

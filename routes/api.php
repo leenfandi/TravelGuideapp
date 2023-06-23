@@ -65,7 +65,7 @@ Route::group([
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
 });
 
 
@@ -78,7 +78,7 @@ Route::group([
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
 });
 
 
@@ -93,7 +93,7 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
        Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
-
+       Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
 
 
     });
