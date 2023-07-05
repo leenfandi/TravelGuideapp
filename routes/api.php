@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\GuideAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -79,6 +80,8 @@ Route::group([
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
     Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
+    Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
 });
 
 
@@ -94,6 +97,6 @@ Route::middleware('auth:api')->group(function ()
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
        Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
-
-
+       Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
+       Route::get('get_search_history',[SearchController::class, 'get_search_history']);
     });

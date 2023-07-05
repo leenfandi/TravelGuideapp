@@ -18,6 +18,10 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
+
+
+   protected $table = "users";
+
     protected $fillable = [
         'name',
         'email',
@@ -67,5 +71,10 @@ class User extends Authenticatable implements JWTSubject
       {
           return $this->hasMany(Comment::class);
       }
+      public function searchs() : HasMany
+      {
+          return $this->hasMany(SearchHistory::class);
+      }
+
     }
 

@@ -33,5 +33,9 @@ class Region extends Model
          {
              return $this->hasMany(Activity::class);
          }
+         public function searchs()
+        {
+            return $this->hasMany(SearchHistory::class);
+        }
     }
 

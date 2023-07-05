@@ -73,5 +73,9 @@ class Guide extends Authenticatable implements JWTSubject
         {
             return $this->hasMany(Comment::class);
         }
+        public function searchs()
+        {
+            return $this->hasMany(SearchHistory::class);
+        }
     }
 
