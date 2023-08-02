@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -72,6 +73,16 @@ class Guide extends Authenticatable implements JWTSubject
        public function comments()
         {
             return $this->hasMany(Comment::class);
+        }
+
+        public function rates() : HasMany
+        {
+            return $this->hasMany(Rate::class);
+        }
+
+        public function bookmarks() : HasMany
+        {
+            return $this->hasMany(Bookmark::class);
         }
     }
 

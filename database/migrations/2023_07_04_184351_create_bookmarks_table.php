@@ -13,26 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('_comments', function (Blueprint $table) {
-            $table-> bigIncrements('id');
-            $table->text('message');
+        Schema::create('bookmarks', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('user_id')->unsigned()->index()->nullable();
-            $table->unsignedBigInteger('activities_id')->nullable();
+            $table->unsignedBigInteger('activity_id')->nullable();
             $table->unsignedBigInteger('guide_id')->nullable();
 
-           // this is working
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-        $table->foreign('activities_id')  ->references('id')->on('activities') ->onDelete('cascade');
+        $table->foreign('activity_id')  ->references('id')->on('activities') ->onDelete('cascade');
 
         $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
-
             $table->timestamps();
-
         });
-
-
-
     }
 
     /**
@@ -42,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_comments');
+        Schema::dropIfExists('bookmarks');
     }
 };
