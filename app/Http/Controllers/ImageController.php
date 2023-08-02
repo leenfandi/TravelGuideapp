@@ -9,6 +9,7 @@ use App\Models\Image;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -24,7 +25,7 @@ class ImageController extends Controller
               $photo=$request->url;
 
           $photoname=time().'.jpg';
-          \Storage::disk('images')->put($photoname,base64_decode($photo));
+          Storage::disk('images')->put($photoname,base64_decode($photo));
           $path="public/images/activity_images/$photoname";
           $image->url = $path;
           }
@@ -38,10 +39,10 @@ class ImageController extends Controller
         ]);
 
 
-        if ($validator->fails())
+        /*if ($validator->fails())
         {
             return response()->json($validator->errors()->toJson(),400);
-        }
+        }*/
 
 
         return response()->json([

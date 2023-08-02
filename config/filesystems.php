@@ -56,6 +56,13 @@ return [
             'throw' => false,
         ],
 
+        'activity' => [
+            'driver' => 'local',
+            'root' => public_path('activity'),
+            'url' => env('APP_URL').'/storage' ,
+            'visibility' => 'public',
+        ]
+
     ],
 
     /*
