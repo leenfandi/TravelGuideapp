@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Bookmark;
+use App\Models\Image;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -63,8 +65,21 @@ class BookmarkController extends Controller
     // for user
     public function GetBookmarks()
     {
-        $user = Auth::guard('api')->user();
-        $activities = Bookmark::with(['activity'])->where('user_id' , $user->id)->latest()->get();
+        $user_id = Auth::guard('api')->id();
+        $bookmarks = Bookmark::where('user_id' , $user_id)->latest()->get();
+        $activities = [];
+        foreach($bookmarks as $bookmark)
+        {
+            $activity = Activity::where('id' , $bookmark->activity_id)->first();
+            if($activity){
+            $activities[] = $activity;}
+        }
+
+        foreach($activities as $activity )
+        {
+             $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+             $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
+        }
 
         return response()->json([
             'message'=>'Bookmarked activities ',
@@ -75,8 +90,22 @@ class BookmarkController extends Controller
         // for guide
     public function GetBookmarksForGuide()
     {
-        $guide = Auth::guard('guide-api')->user();
-        $activities = Bookmark::with(['activity'])->where('guide_id' , $guide->id)->latest()->get();
+
+        $guide_id = Auth::guard('guide-api')->id();
+        $bookmarks = Bookmark::where('guide_id' , $guide_id)->latest()->get();
+        $activities = [];
+        foreach($bookmarks as $bookmark)
+        {
+            $activity = Activity::where('id' , $bookmark->activity_id)->first();
+            if($activity){
+            $activities[] = $activity;}
+        }
+
+        foreach($activities as $activity )
+        {
+             $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+             $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
+        }
 
         return response()->json([
             'message'=>'Bookmarked activities ',

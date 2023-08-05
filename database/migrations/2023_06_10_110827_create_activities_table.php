@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->text('description');
-           // $table->double('distance');
-           // $table->string('time');
             $table->integer('price');
+            $table->float('latitude');
+            $table->float('longitude');
 
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
             $table->timestamps();

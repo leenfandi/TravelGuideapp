@@ -88,6 +88,8 @@ Route::group([
     Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
     Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
+    Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
+    Route::get('toprated',[RateController::class, 'GetTopRated']);
 });
 
 
@@ -106,6 +108,7 @@ Route::middleware('auth:api')->group(function ()
        Route::get('toprated',[RateController::class, 'GetTopRated']);
        Route::get('bookmarked',[BookmarkController::class, 'GetBookmarks']);
        Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmark']);
+       Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
 
 
 

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Image;
-use GuzzleHttp\Promise\Create;
+use App\Models\Rate;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
@@ -42,45 +42,49 @@ class ActivityController extends Controller
             'message'=>'Activity added successfully',
 
         ],201);
-    }
 
-    public function AddActivityWithImages (Request $request)
-    {
-        $validator = Validator::make($request->all() ,[
-            'region_id'=>'required',
-            'name'=>'required',
-            'type'=>'required',
-            'description'=>'required',
-            'price' => 'required' ,
+
+    }
+    public function nearby_activity_by_type( Request $request ){
+
+
+        $validator =Validator::make($request->all(),[
+
+            'type ' => 'required|string',
+
         ]);
 
-        if ($validator->fails())
-        {
-            return response()->json($validator->errors()->toJson(),400);
-        }
-        $activity=Activity::create(array_merge(
-            $validator->validated()
-        ));
+        if ($validator->fails()) {
+           return response()->json(['error'=>$validator->errors()]);
+       }
+      $activity = Activity::select('name','type','description')->where('type',$request->type)->get();
 
-        foreach ($request->images as $imagefile) {
+      return response()->json([
+        'message'=>$activity,
 
-           $image = new Image();
-            $image->activity_id = $activity->id;
-            if ($imagefile->isValid()){
-            $photoname=time().'.jpg';
-            $imagefile->store('/' , 'activity');
-            $path="public/activity/$photoname";
-            $image->url = $path;
-            $image->save();
-
-        }
-    }
-        return response()->json([
-            'message'=>'Activity added successfully',
-            'ac_id' => $activity->id
-        ],201);
-
-    }
-
+    ],201);
 }
 
+public function GetNearbyByLocation (Request $request)
+{
+    $latitude = $request->latitude;
+    $longitude = $request->longitude;
+    $radius = 20000;
+    $activities = Activity::where('latitude' , '>' , $latitude - $radius)
+                        ->where('latitude' , '<' , $latitude + $radius)
+                        ->where('longitude' , '>' , $longitude - $radius)
+                        ->where('longitude' , '<' , $longitude + $radius)->get();
+
+    foreach($activities as $activity )
+    {
+      $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+      $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
+     }
+
+     return response()->json([
+        'data'=>$activities,
+
+    ],201);
+}
+
+}

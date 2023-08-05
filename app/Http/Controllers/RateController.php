@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Image;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +84,7 @@ class RateController extends Controller
        foreach($activities as $activity )
        {
             $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+            $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
        }
           $topRated = $activities->sortByDesc('rating')->take(10);
 

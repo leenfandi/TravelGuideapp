@@ -9,7 +9,6 @@ use App\Models\Image;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -22,13 +21,6 @@ class ImageController extends Controller
 
         if ($request->url && $request->url->isValid()){
 
-              $photo=$request->url;
-
-          $photoname=time().'.jpg';
-          Storage::disk('images')->put($photoname,base64_decode($photo));
-          $path="public/images/activity_images/$photoname";
-          $image->url = $path;
-          }
             //  $photo=$request->url;
               $file_extension = $request->url->extension();
                 $file_name = time() . '.' . $file_extension;
@@ -47,7 +39,7 @@ class ImageController extends Controller
         ]);
     }
 
-        /*if ($validator->fails())
+       /* if ($validator->fails())
         {
             return response()->json($validator->errors()->toJson(),400);
         }*/
@@ -60,7 +52,7 @@ class ImageController extends Controller
 
 
     }
-    public function add_Activity_With_Image($activity_id){
+    public function get_Activity_With_Image($activity_id){
 
 
          $activity = Activity::select('region_id','name','type','description','price')->where('id' , $activity_id)
@@ -93,6 +85,10 @@ class ImageController extends Controller
 
         ],201);
     }
+
+
+
+
 
     }
 
