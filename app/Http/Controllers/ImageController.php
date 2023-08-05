@@ -29,6 +29,14 @@ class ImageController extends Controller
           $path="public/images/activity_images/$photoname";
           $image->url = $path;
           }
+            //  $photo=$request->url;
+              $file_extension = $request->url->extension();
+                $file_name = time() . '.' . $file_extension;
+                $request->url->move(public_path('images/activity_images'), $file_name);
+                $path = "public/images/activity_images/$file_name";
+                $image->url = $path;
+
+
 
           $image->save();
 
@@ -37,7 +45,7 @@ class ImageController extends Controller
             'image'=>$image,
 
         ]);
-
+    }
 
         /*if ($validator->fails())
         {
@@ -52,26 +60,29 @@ class ImageController extends Controller
 
 
     }
-    public function add_Activity_With_Image(Request $request){
+    public function add_Activity_With_Image($activity_id){
 
-        $input = $request->all();
-        $images = new Image();
 
-        $images->activity_id = $input['activity_id'];
+         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $activity_id)
+        ->first();
+        if($activity)
+        {
+            $urls=Image::select('url')->where('activity_id',$activity_id)
+            ->orderBy('id','desc')->get();
 
-         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $images->activity_id)->latest()->first();
-         $url = Image::select('url','activity_id')->where('activity_id' , $images->activity_id)->latest()->first();
+        }
 
             $formedData['your activity'][] =
             [
 
-                'url'=> $url->url,
-                'activity_id' => $url->activity->id,
+                'url'=> $urls,
+                'activity_id' => $activity_id,
                'region_id' => $activity->region->id ,
                'name' => $activity->name ,
                'type' => $activity ->type ,
                'description' => $activity ->description,
                'price' => $activity -> price,
+
 
 
             ];

@@ -25,8 +25,6 @@ class ActivityController extends Controller
             'name'=>'required',
             'type'=>'required',
             'description'=>'required',
-           // 'distance' => 'required' ,
-            //'time' => 'required'
             'price' => 'required'
 
         ]);

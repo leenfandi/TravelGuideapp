@@ -74,15 +74,5 @@ class Guide extends Authenticatable implements JWTSubject
         {
             return $this->hasMany(Comment::class);
         }
-
-        public function rates() : HasMany
-        {
-            return $this->hasMany(Rate::class);
-        }
-
-        public function bookmarks() : HasMany
-        {
-            return $this->hasMany(Bookmark::class);
-        }
     }
 

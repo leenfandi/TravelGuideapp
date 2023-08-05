@@ -12,6 +12,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\RateController;
 
+use App\Http\Controllers\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -68,8 +69,7 @@ Route::group([
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
-    Route::post('addactivitywithmultiimages' , [ActivityController::class , 'AddActivityWithImages']);
+    Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
 });
 
 
@@ -82,10 +82,12 @@ Route::group([
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('getactivity',[ImageController::class, 'add_Activity_With_Image']);
     Route::post('addrate/{activity_id}',[RateController::class, 'SetRateGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
+    Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
+    Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
 });
 
 
@@ -107,4 +109,7 @@ Route::middleware('auth:api')->group(function ()
 
 
 
+       Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
+       Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
+       Route::get('get_search_history',[SearchController::class, 'get_search_history']);
     });
