@@ -45,25 +45,8 @@ class ActivityController extends Controller
 
 
     }
-    public function nearby_activity_by_type( Request $request ){
 
 
-        $validator =Validator::make($request->all(),[
-
-            'type ' => 'required|string',
-
-        ]);
-
-        if ($validator->fails()) {
-           return response()->json(['error'=>$validator->errors()]);
-       }
-      $activity = Activity::select('name','type','description')->where('type',$request->type)->get();
-
-      return response()->json([
-        'message'=>$activity,
-
-    ],201);
-}
 
 public function GetNearbyByLocation (Request $request)
 {
