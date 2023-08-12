@@ -70,6 +70,7 @@ Route::group([
    // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
     Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
 });
 
 
@@ -116,5 +117,6 @@ Route::middleware('auth:api')->group(function ()
        Route::post('rateaguide/{guide_id}',[RateController::class, 'PutRateToGuide']);
        Route::get('topguides',[RateController::class, 'GetTopGuides']);
 
+       Route::post('change_password',[RegisterController::class,'changePassword']);
 
     });
