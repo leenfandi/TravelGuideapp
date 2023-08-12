@@ -23,7 +23,6 @@ class RegisterController extends Controller
     public function register (Request $request)
     {
         $userr = new user();
-
         $validator =Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required|string|email|unique:users',
@@ -116,9 +115,8 @@ class RegisterController extends Controller
         $validator = validator($input, [
             'name'=>'string',
             'email'=>'string|email|unique:users',
-            'password'=>'min:8',
             'number'=>'string',
-            'image' => 'string',
+            'image' => 'nullable',
 
 
         ]);
@@ -132,9 +130,7 @@ class RegisterController extends Controller
         if($request->exists('email')){
         $user->email= $input['email'] ;
         }
-        if($request->exists('password')){
-        $user->password=  Hash::make($input['password'])  ;
-        }
+
 
         if($request->exists('number')){
             $user->number= $input['number'] ;
@@ -143,8 +139,8 @@ class RegisterController extends Controller
 
             $file_extension = $request->image->extension();
             $file_name = time() . '.' . $file_extension;
-            $request->image->move(public_path('images/drivers'), $file_name);
-            $path = "public/images/drivers/$file_name";
+            $request->image->move(public_path('images/activity_images'), $file_name);
+            $path = "public/images/activity_images/$file_name";
 
             $user->image = $path;
 
@@ -154,24 +150,38 @@ class RegisterController extends Controller
 
         return response()->json(['user'=>$user,'msg'=>'user update succefully']);
     }
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-   /* public function refresh()
-    {
-        return $this->respondWithToken(auth()->refresh());
-    }
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
 
+    public function changePassword (Request $request){
 
+        $validator = Validator::make($request->all(), [
 
+       'old_password' => 'required',
+       'password' => 'required|min:8',
+       'confirm_password' => 'required|same:password'
 
+]);
+        if ($validator->fails()) {
+           return response()->json([
+            'message'=> 'Validator fails',
+            'error'=>$validator->errors()]);
+}
+
+         $user = $request->user();
+         if(Hash::check($request->old_password , $user->password)){
+
+            $user->update([
+             'password' => Hash::make($request->password)
+            ]);
+            return response()->json([
+                'message' => 'Change password Successsfuly'
+                ] ,200);
+}
+
+           else {
+               return response()->json([
+                'message' => 'Old password does not matched'
+                ] ,400);
+}
+}
 }

@@ -112,5 +112,5 @@ Route::middleware('auth:api')->group(function ()
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
-      
+       Route::post('change_password',[RegisterController::class,'changePassword']);
     });

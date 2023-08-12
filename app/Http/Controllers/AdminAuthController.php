@@ -40,15 +40,16 @@ class AdminAuthController extends Controller
             return response()->json($validator->errors()->toJson(),400);
         }
 
-        if ($request->image){
-
-            $file_extension = $request->image->extension();
-            $file_name = time() . '.' . $file_extension;
-            $request->image->move(public_path('images/activity_images'), $file_name);
-            $path = "public/images/activity_images/$file_name";
-            $guidee->image = $path;
-
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'public/images/activity_images/' . $imageName;
+            $image->move(public_path('images/activity_images'), $imageName);
+            $guidee->image=$imagePath;
+           
         }
+
+
 
         $guide=Guide::create(array_merge(
             $validator->validated(),
