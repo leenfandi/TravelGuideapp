@@ -94,9 +94,54 @@ public function addRegion (Request $request)
     ]);
 
     return response()->json([
-        'data'=>$region,
+     'data'=> $region,
 
     ],201);
 }
+
+public function GetAllCities()
+{
+    $cities = City::all();
+
+    return response()->json([
+        $cities
+
+    ],200);
+}
+
+public function GetAllRegions()
+{
+    $regions = Region::all();
+
+    return response()->json([
+        $regions
+
+    ],200);
+}
+
+public function GetRegionsInCity ($city_id)
+{
+    $regions = Region::where('city_id' , $city_id)->get();
+
+    return response()->json([
+        $regions
+    ],200);
+}
+
+public function GetEverything()
+{
+    $cities = City::all();
+
+    foreach($cities as $city)
+    {
+        $city->regions = Region::where('city_id' , $city->id)->get();
+    }
+
+    return response()->json([
+        $cities
+    ],200);
+}
+
+
 
 }

@@ -12,6 +12,7 @@ class Region extends Model
     use HasFactory;
     protected $table = "regions";
     protected $fillable = [
+        'city_id' ,
         'name',
 
 
