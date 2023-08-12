@@ -12,7 +12,8 @@ class Image extends Model
 
     protected $fillable = [
         'activity_id',
-        'url'
+        'url',
+       
     ];
 
     public function activity()

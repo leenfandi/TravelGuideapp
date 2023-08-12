@@ -100,7 +100,7 @@ Route::get('profile',function(){
 
 Route::middleware('auth:api')->group(function ()
     {
-
+       Route::post('updateprofile',[RegisterController::class,'updateProfile']);
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
        Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
@@ -109,10 +109,8 @@ Route::middleware('auth:api')->group(function ()
        Route::get('bookmarked',[BookmarkController::class, 'GetBookmarks']);
        Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmark']);
        Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
-
-
-
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
+      
     });

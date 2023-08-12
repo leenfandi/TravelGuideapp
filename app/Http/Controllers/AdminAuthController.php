@@ -22,20 +22,34 @@ class AdminAuthController extends Controller
 
     public function addguide (Request $request)
     {
+        $guidee = new guide();
 
         $validator =Validator::make($request->all(),[
             'name'=>'required',
             'email'=>'required|string|email|unique:guides',
             'password'=>'required|min:8',
             'gender' => 'required' ,
-            'age' => 'required'
+            'age' => 'required',
+            'yearsofExperience' => 'required',
+            'image' => 'nullable',
+            'location'=> 'required',
 
         ]);
-
         if ($validator->fails())
         {
             return response()->json($validator->errors()->toJson(),400);
         }
+
+        if ($request->image){
+
+            $file_extension = $request->image->extension();
+            $file_name = time() . '.' . $file_extension;
+            $request->image->move(public_path('images/activity_images'), $file_name);
+            $path = "public/images/activity_images/$file_name";
+            $guidee->image = $path;
+
+        }
+
         $guide=Guide::create(array_merge(
             $validator->validated(),
             ['password'=>bcrypt($request->password)]

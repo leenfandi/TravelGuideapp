@@ -171,6 +171,7 @@ class CommentController extends Controller
 public function showcomment($activity_id)
     {
         $activity = Activity::where('id', $activity_id)->first();
+
         if ($activity) {
             $comments=Comment::with(['admin'])->where('activities_id',$activity_id)
             ->orderBy('id','desc')->get();
@@ -179,6 +180,7 @@ public function showcomment($activity_id)
                 return response()->json([
                     'message'=>' opinion of other ',
                     'data'=>$comments,
+                     'name'=>$comment->user->name,
 
                 ],200);
 

@@ -25,6 +25,9 @@ class Guide extends Authenticatable implements JWTSubject
         'password',
         'gender',
         'age',
+        'yearsofExperience',
+        'image',
+        'location',
     ];
 
     /**

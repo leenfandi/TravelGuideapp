@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('gender');
             $table->string('age');
+            $table->integer('yearsofExperience');
+            $table->string('image')->nullable();
+            $table->string('location');
             $table->timestamps();
         });
     }
