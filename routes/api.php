@@ -69,7 +69,7 @@ Route::group([
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
    // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
+   // Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
 });
 
@@ -86,7 +86,7 @@ Route::group([
     Route::post('addrate/{activity_id}',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
-    Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
+   // Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
     Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
     Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
