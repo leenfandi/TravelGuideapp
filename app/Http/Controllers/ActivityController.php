@@ -76,7 +76,7 @@ public function GetNearbyByLocation (Request $request)
 
 public function addCity (Request $request)
 {
-    $city = City::creat([
+    $city = City::create([
         'name' => $request->name
     ]);
 
@@ -88,7 +88,7 @@ public function addCity (Request $request)
 
 public function addRegion (Request $request)
 {
-    $region = Region::creat([
+    $region = Region::create([
         'city_id' => $request->city_id ,
         'name' => $request->name
     ]);
