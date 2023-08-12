@@ -30,13 +30,13 @@ class SearchController extends Controller
 
         $search = SearchHistory::create([
             'text_search' => $region->name,
-            'region_id' => $region->id,
+            //'region_id' => $region->id,
             'user_id' => $user_id,
         ]);
 
         $response = [
             'text_search' => $region->name,
-            'region_id' => $region->id,
+            //'region_id' => $region->id,
             'user_id' => $user_id,
         ];
 
@@ -62,13 +62,13 @@ class SearchController extends Controller
 
             $search = SearchHistory::create([
                 'text_search' => $region->name,
-                'region_id' => $region->id,
+               // 'region_id' => $region->id,
                 'guide_id' => $guide_id,
             ]);
 
             $response = [
                 'text_search' => $region->name,
-                'region_id' => $region->id,
+               // 'region_id' => $region->id,
                 'guide_id' => $guide_id,
             ];
 
@@ -84,7 +84,7 @@ class SearchController extends Controller
 
             $user_id = Auth::guard('api')->user()->id;
 
-            $searchHistory = SearchHistory::select('id', 'text_search', 'region_id', 'user_id')
+            $searchHistory = SearchHistory::select('id', 'text_search', /*'region_id',*/ 'user_id')
                 ->where('user_id', $user_id)
                 ->get();
 
@@ -102,7 +102,7 @@ class SearchController extends Controller
 
             $guide_id = Auth::guard('guide-api')->user()->id;
 
-            $searchHistory = SearchHistory::select('id', 'text_search', 'region_id', 'guide_id')
+            $searchHistory = SearchHistory::select('id', 'text_search', /*'region_id',*/ 'guide_id')
                 ->where('guide_id', $guide_id)
                 ->get();
 

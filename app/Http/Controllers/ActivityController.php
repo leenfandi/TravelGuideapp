@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\City;
 use App\Models\Image;
 use App\Models\Rate;
+use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -68,6 +70,31 @@ public function GetNearbyByLocation (Request $request)
 
      return response()->json([
         'data'=>$activities,
+
+    ],201);
+}
+
+public function addCity (Request $request)
+{
+    $city = City::creat([
+        'name' => $request->name
+    ]);
+
+    return response()->json([
+        'data'=>$city,
+
+    ],201);
+}
+
+public function addRegion (Request $request)
+{
+    $region = Region::creat([
+        'city_id' => $request->city_id ,
+        'name' => $request->name
+    ]);
+
+    return response()->json([
+        'data'=>$region,
 
     ],201);
 }
