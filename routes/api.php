@@ -70,6 +70,7 @@ Route::group([
     Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
     Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
 });
 
 
@@ -113,4 +114,5 @@ Route::middleware('auth:api')->group(function ()
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
        Route::post('change_password',[RegisterController::class,'changePassword']);
+
     });

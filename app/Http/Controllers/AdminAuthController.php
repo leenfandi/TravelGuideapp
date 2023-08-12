@@ -46,7 +46,7 @@ class AdminAuthController extends Controller
             $imagePath = 'public/images/activity_images/' . $imageName;
             $image->move(public_path('images/activity_images'), $imageName);
             $guidee->image=$imagePath;
-           
+
         }
 
 
@@ -143,6 +143,31 @@ class AdminAuthController extends Controller
             return response()->json(['message' => 'Successfully logged out']);
         }
 
+        public function getProfile_of_guides()
+        {
+            $guides = Guide::select('id', 'name', 'gender', 'age', 'yearsofExperience', 'image', 'location')->get();
+
+            $response = [];
+
+            foreach ($guides as $guide) {
+                $image = is_null($guide->image) ? 'null' : asset($guide->image);
+
+                $response[] = [
+                    'id' => $guide->id,
+                    'name' => $guide->name,
+                    'image' => $image,
+                    'age' => $guide->age,
+                    'yearsofExperience' => $guide->yearsofExperience,
+                    'location' => $guide->location
+                ];
+            }
+
+            return response()->json($response);
+        }
+
+    }
+
+
         /**
          * Refresh a token.
          *
@@ -163,4 +188,4 @@ class AdminAuthController extends Controller
 
 
 
-    }
+    
