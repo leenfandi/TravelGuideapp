@@ -69,8 +69,9 @@ Route::group([
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
    // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-   // Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
+    Route::get('getactivity',[ActivityController::class,'getallactivities']);
 });
 
 
