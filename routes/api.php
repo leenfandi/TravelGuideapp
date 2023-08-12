@@ -67,7 +67,7 @@ Route::group([
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
-    Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
+   // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
     Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
 });
@@ -80,9 +80,9 @@ Route::group([
 ], function () {
 
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
-    Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
+    Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('addrate/{activity_id}',[RateController::class, 'SetRateGuide']);
+    Route::post('addrate/{activity_id}',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
     Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
@@ -103,6 +103,7 @@ Route::middleware('auth:api')->group(function ()
        Route::post('updateprofile',[RegisterController::class,'updateProfile']);
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
+       Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
        Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
        Route::post('addrate/{activity_id}',[RateController::class, 'SetRate']);
        Route::get('toprated',[RateController::class, 'GetTopRated']);
@@ -112,5 +113,8 @@ Route::middleware('auth:api')->group(function ()
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
-      
+       Route::post('rateaguide/{guide_id}',[RateController::class, 'PutRateToGuide']);
+       Route::get('topguides',[RateController::class, 'GetTopGuides']);
+
+
     });

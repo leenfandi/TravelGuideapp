@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('yearsofExperience');
             $table->string('image')->nullable();
             $table->string('location');
+            $table->text('bio')->nullable();
             $table->timestamps();
         });
     }

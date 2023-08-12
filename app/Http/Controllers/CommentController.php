@@ -111,32 +111,7 @@ class CommentController extends Controller
 
 
     }
-    // for guide
-    public function listcomment($activity_id)
-    {
-        $activity = Activity::where('id', $activity_id)->first();
-        if ($activity) {
-            $comments=Comment::with(['guide'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->get();
 
-
-                return response()->json([
-                    'message'=>' opinion of other ',
-                    'data'=>$comments,
-
-                ],200);
-
-
-
-        }
-        else{
-            return response()->json([
-                'message'=>'comment not found',
-
-            ]);
-        }
-
-    }
     //for user
     public function deletecommentuser( ){
         $user_id= Auth::guard('api')->user()->id;
@@ -167,31 +142,37 @@ class CommentController extends Controller
         ],400);
         }
 }
-//for admin
+
 public function showcomment($activity_id)
     {
         $activity = Activity::where('id', $activity_id)->first();
 
-        if ($activity) {
-            $comments=Comment::with(['admin'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->get();
+        if($activity)
+        {
+            $comments = Comment::where('activities_id' , $activity_id)->get();
 
+            foreach($comments as $comment)
+            {
+                if($comment->user_id != null)
+                {
+                    $comment->user= User::select('name' , 'image')->where('id' , $comment->user_id)->get();
+                }
+                if($comment->guide_id != null)
+                {
+                    $comment->guide= Guide::select('name' , 'image')->where('id' , $comment->guide_id)->get();
+                }
+            }
+            return response()->json([
+                'message'=>' opinion of other ',
+                'data'=>$comments,
 
-                return response()->json([
-                    'message'=>' opinion of other ',
-                    'data'=>$comments,
-                     'name'=>$comment->user->name,
-
-                ],200);
-
-
-
+            ],200);
         }
         else{
             return response()->json([
                 'message'=>'comment not found',
-
             ]);
-        }}
+        }
+        }
 
 }

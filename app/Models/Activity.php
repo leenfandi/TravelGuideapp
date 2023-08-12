@@ -20,6 +20,9 @@ class Activity extends Model
         //'distance',
         //'time',
         'price',
+        'latitude' ,
+        'longitude'
+
     ];
 
     public function region() : BelongsTo

@@ -28,6 +28,7 @@ class Guide extends Authenticatable implements JWTSubject
         'yearsofExperience',
         'image',
         'location',
+        'bio' ,
     ];
 
     /**
@@ -90,6 +91,10 @@ class Guide extends Authenticatable implements JWTSubject
         public function searchs()
         {
             return $this->hasMany(SearchHistory::class);
+        }
+        public function guide_rates() : HasMany
+        {
+            return $this->hasMany(guide_rates::class);
         }
     }
 

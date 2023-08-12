@@ -41,8 +41,8 @@ class RegisterController extends Controller
 
             $file_extension = $request->image->extension();
             $file_name = time() . '.' . $file_extension;
-            $request->image->move(public_path('images/activity_images'), $file_name);
-            $path = "public/images/activity_images/$file_name";
+            $request->image->move(public_path('images/users_images'), $file_name);
+            $path = "public/images/users_images/$file_name";
             $userr->image = $path;
 
         }

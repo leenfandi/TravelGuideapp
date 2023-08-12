@@ -87,6 +87,10 @@ class User extends Authenticatable implements JWTSubject
       {
           return $this->hasMany(SearchHistory::class);
       }
+      public function guide_rates() : HasMany
+      {
+        return $this->hasMany(Guide_Rates::class);
+      }
 
     }
 

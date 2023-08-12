@@ -13,21 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('search_histories', function (Blueprint $table) {
+        Schema::create('guide_rates', function (Blueprint $table) {
             $table->id();
-            $table->string('text_search');
-
+            $table->integer('rate');
             $table->bigInteger('user_id')->unsigned()->index()->nullable();
-           // $table->unsignedBigInteger('region_id')->nullable();
             $table->unsignedBigInteger('guide_id')->nullable();
 
-           $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-           //$table->foreign('region_id')  ->references('id')->on('regions') ->onDelete('cascade');
-
-           $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
-
-           $table->timestamps();
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -38,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('search_histories');
+        Schema::dropIfExists('guide_rates');
     }
 };

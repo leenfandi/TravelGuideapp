@@ -33,6 +33,7 @@ class AdminAuthController extends Controller
             'yearsofExperience' => 'required',
             'image' => 'nullable',
             'location'=> 'required',
+            'bio' => 'nullable'
 
         ]);
         if ($validator->fails())
@@ -44,11 +45,12 @@ class AdminAuthController extends Controller
 
             $file_extension = $request->image->extension();
             $file_name = time() . '.' . $file_extension;
-            $request->image->move(public_path('images/activity_images'), $file_name);
-            $path = "public/images/activity_images/$file_name";
+            $request->image->move(public_path('images/guides_images'), $file_name);
+            $path = "public/images/guides_images/$file_name";
             $guidee->image = $path;
 
         }
+
 
         $guide=Guide::create(array_merge(
             $validator->validated(),
