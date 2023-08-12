@@ -91,6 +91,8 @@ Route::group([
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
     Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
     Route::get('toprated',[RateController::class, 'GetTopRated']);
+    Route::post('addcity',[ActivityController::class, 'addCity']);
+    Route::post('addregion',[ActivityController::class, 'addRegion']);
 });
 
 
