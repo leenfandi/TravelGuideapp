@@ -76,6 +76,8 @@ Route::group([
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
     Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+    Route::post('addcity',[ActivityController::class, 'addCity']);
+    Route::post('addregion',[ActivityController::class, 'addRegion']);
 
 });
 
