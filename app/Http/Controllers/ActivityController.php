@@ -138,10 +138,40 @@ public function GetEverything()
     }
 
     return response()->json([
-        $cities
+        'cities ' => $cities
     ],200);
 }
 
+public function getallactivities()
+{
+    $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude')->get();
 
 
+    $formedData = [];
+
+    foreach ($activities as $activity) {
+
+        $urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+
+        $activityData = [
+            'url' => $urls,
+            'activity_id' => $activity->id,
+            'region_id' => $activity->region_id,
+            'name' => $activity->name,
+            'type' => $activity->type,
+            'description' => $activity->description,
+            'price' => $activity->price,
+            'latitude' => $activity->latitude,
+            'longitude' => $activity->longitude
+        ];
+
+        $formedData[] = $activityData;
+    }
+
+    return response()->json([
+        'message' => 'Get activities with images successfully',
+        'data' => $formedData
+    ], 201);
 }
+
+    }

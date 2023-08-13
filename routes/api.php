@@ -69,8 +69,14 @@ Route::group([
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
    // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
-   // Route::get('getactivity/{activity_id}',[ImageController::class, 'add_Activity_With_Image']);
+    Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
+    Route::get('getactivity',[ActivityController::class,'getallactivities']);
+    Route::get('getcities',[ActivityController::class,'GetAllCities']);
+    Route::get('getregions',[ActivityController::class,'GetAllRegions']);
+    Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+    Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+
 });
 
 
@@ -93,6 +99,13 @@ Route::group([
     Route::get('toprated',[RateController::class, 'GetTopRated']);
     Route::post('addcity',[ActivityController::class, 'addCity']);
     Route::post('addregion',[ActivityController::class, 'addRegion']);
+    Route::get('getactivity',[ActivityController::class,'getallactivities']);
+    Route::get('getcities',[ActivityController::class,'GetAllCities']);
+    Route::get('getregions',[ActivityController::class,'GetAllRegions']);
+    Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+    Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+    Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
+
 });
 
 
@@ -118,6 +131,12 @@ Route::middleware('auth:api')->group(function ()
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
        Route::post('rateaguide/{guide_id}',[RateController::class, 'PutRateToGuide']);
        Route::get('topguides',[RateController::class, 'GetTopGuides']);
+       Route::get('getactivity',[ActivityController::class,'getallactivities']);
+       Route::get('getcities',[ActivityController::class,'GetAllCities']);
+       Route::get('getregions',[ActivityController::class,'GetAllRegions']);
+       Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+       Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+       Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
 
        Route::post('change_password',[RegisterController::class,'changePassword']);
 

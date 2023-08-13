@@ -55,7 +55,8 @@ class ImageController extends Controller
     public function get_Activity_With_Image($activity_id){
 
 
-         $activity = Activity::select('region_id','name','type','description','price')->where('id' , $activity_id)
+         $activity = Activity::select('region_id','name','type','latitude' ,
+         'longitude','description','price')->where('id' , $activity_id)
         ->first();
         if($activity)
         {
@@ -74,6 +75,8 @@ class ImageController extends Controller
                'type' => $activity ->type ,
                'description' => $activity ->description,
                'price' => $activity -> price,
+               'latitude' => $activity -> latitude ,
+               'longitude' => $activity ->longitude
 
 
 
