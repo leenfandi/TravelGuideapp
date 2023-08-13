@@ -64,8 +64,9 @@ Route::group([
 
 
     Route::post('addguide',[AdminAuthController::class,'addguide']);
+    Route::post('addimages',[ImageController::class,'AddImages']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
-    Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
+    Route::get('showcomment',[CommentController::class, 'showcomment']);
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
    // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
     Route::post('addimage',[ImageController::class, 'Addimage']);
@@ -90,8 +91,9 @@ Route::group([
 
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
-    Route::post('addimage',[ImageController::class, 'Addimage']);
-    Route::post('addrate/{activity_id}',[RateController::class, 'SetRateForGuide']);
+    Route::post('addimages',[ImageController::class,'AddImages']);
+    Route::post('addactivity',[ActivityController::class,'AddActivity']);
+    Route::post('addrate',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
    // Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
@@ -123,15 +125,15 @@ Route::middleware('auth:api')->group(function ()
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
        Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
        Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
-       Route::post('addrate/{activity_id}',[RateController::class, 'SetRate']);
+       Route::post('addrate',[RateController::class, 'SetRate']);
        Route::get('toprated',[RateController::class, 'GetTopRated']);
        Route::get('bookmarked',[BookmarkController::class, 'GetBookmarks']);
-       Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmark']);
+       Route::post('addbookamrk',[BookmarkController::class, 'AddBookmark']);
        Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
-       Route::post('rateaguide/{guide_id}',[RateController::class, 'PutRateToGuide']);
+       Route::post('rateaguide',[RateController::class, 'PutRateToGuide']);
        Route::get('topguides',[RateController::class, 'GetTopGuides']);
        Route::get('getactivity',[ActivityController::class,'getallactivities']);
        Route::get('getcities',[ActivityController::class,'GetAllCities']);

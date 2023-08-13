@@ -13,13 +13,13 @@ use App\Models\User;
 class BookmarkController extends Controller
 {
     // for user
-    public function AddBookmark($activity_id)
+    public function AddBookmark(Request $request)
     {
        $user_id = Auth::guard('api')->id();
-       $activity = Activity::where('id' , $activity_id)->get();
-       $bookmark = Bookmark::where('user_id' , $user_id)->where('activity_id' , $activity_id)->first();
+       $activity = Activity::where('id' , $request->activity_id)->get();
+       $bookmark = Bookmark::where('user_id' , $user_id)->where('activity_id' , $request->activity_id)->first();
         if($bookmark){
-           $query = Bookmark::where('activity_id' , $activity_id)->where('user_id' , $user_id)->delete();
+           $query = Bookmark::where('activity_id' , $request->activity_id)->where('user_id' , $user_id)->delete();
 
            return response()->json([
             'message'=>'bookmark deleted',
@@ -28,7 +28,7 @@ class BookmarkController extends Controller
         else {
             $newBookmark = Bookmark::create([
                 'user_id' => $user_id ,
-                'activity_id' => $activity_id
+                'activity_id' => $request->activity_id
             ]);
 
             return response()->json([

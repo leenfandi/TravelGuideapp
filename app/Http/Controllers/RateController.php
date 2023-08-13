@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Validator;
 
 class RateController extends Controller
 {
-    public function SetRate ($activity_id , Request $request)
+    public function SetRate ( Request $request)
     {
         $user_id = Auth::guard('api')->id();
-        $activity = Activity::where('id',$activity_id)->first();
+        $activity = Activity::where('id',$request->activity_id)->first();
         if($activity)
         {
             $validator = Validator($request->all() , [
+                'activity_id' => 'required' ,
                 'rate' => 'required|int'
             ]);
             if($validator->fails())
@@ -34,7 +35,7 @@ class RateController extends Controller
             $rate = Rate::create([
                 'rate' => $request->rate ,
                 'user_id' => $user_id,
-                'activity_id' => $activity_id
+                'activity_id' => $request->activity_id
             ]);
             return response()->json([
                 'message'=>'Rate added',
@@ -45,11 +46,11 @@ class RateController extends Controller
         ], 422);
 
     }
-
-    public function SetRateForGuide ($activity_id , Request $request)
+    // let guide rate an activity
+    public function SetRateForGuide ( Request $request)
     {
         $guide_id = Auth::guard('guide-api')->id();
-        $activity = Activity::where('id',$activity_id)->first();
+        $activity = Activity::where('id',$request->activity_id)->first();
         if($activity)
         {
             $validator = Validator($request->all() , [
@@ -66,7 +67,7 @@ class RateController extends Controller
             $rate = Rate::create([
                 'rate' => $request->rate ,
                 'guide_id' => $guide_id,
-                'activity_id' => $activity_id
+                'activity_id' => $request->activity_id
             ]);
             return response()->json([
                 'message'=>'Rate added',
@@ -91,15 +92,16 @@ class RateController extends Controller
           $topRated = $activities->sortByDesc('rating')->take(10);
 
          return response()->json([
-           'Top_Rated'=> $topRated
+            'message'=>'Top Rated activities ',
+            'data'=> $topRated
          ]  ,200);
     }
 
     // to let user rate a guide
-    public function PutRateToGuide ($guide_id , Request $request)
+    public function PutRateToGuide ( Request $request)
     {
         $user_id = Auth::guard('api')->id();
-        $guide = Guide::where('id',$guide_id)->first();
+        $guide = Guide::where('id',$request->guide_id)->first();
         if($guide)
         {
             $validator = Validator($request->all() , [
@@ -116,7 +118,7 @@ class RateController extends Controller
             $rate = Guide_Rates::create([
                 'rate' => $request->rate ,
                 'user_id' => $user_id,
-                'guide_id' => $guide_id
+                'guide_id' => $request->guide_id
             ]);
             return response()->json([
                 'message'=>'Rate added',

@@ -4,14 +4,38 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Activity;
+use App\Models\City;
 use App\Models\Guide;
 use App\Models\Image;
+use App\Models\Region;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
+
+    public function AddImages(Request $request)
+    {
+        $paths = [];
+        foreach($request->images as $image){
+
+             $file_extension = $image->extension();
+                $file_name = time() . rand(1,100) .'.' . $file_extension;
+                $image->move(public_path('images/activity_images'), $file_name);
+                $path = "public/images/activity_images/$file_name";
+                $paths[] = $path;
+
+            }
+
+       return response()->json([
+                'message'=>'Images added successfully',
+                'data' =>  $paths ,
+
+                  ],201);
+    }
+
+    /*
     public function Addimage(Request $request)
     {
         $input = $request->all();
@@ -42,7 +66,7 @@ class ImageController extends Controller
        /* if ($validator->fails())
         {
             return response()->json($validator->errors()->toJson(),400);
-        }*/
+        }
 
 
         return response()->json([
@@ -51,7 +75,7 @@ class ImageController extends Controller
         ],201);
 
 
-    }
+    }*/
     public function get_Activity_With_Image($activity_id){
 
 
@@ -62,6 +86,8 @@ class ImageController extends Controller
         {
             $urls=Image::select('url')->where('activity_id',$activity_id)
             ->orderBy('id','desc')->get();
+            $region = Region::where('id'  ,$activity->region_id)->first();
+            $city = City::where('id' , $region->city_id)->first();
 
         }
 
@@ -76,7 +102,9 @@ class ImageController extends Controller
                'description' => $activity ->description,
                'price' => $activity -> price,
                'latitude' => $activity -> latitude ,
-               'longitude' => $activity ->longitude
+               'longitude' => $activity ->longitude ,
+               'region' => $region ,
+               'city' => $city
 
 
 
@@ -84,7 +112,7 @@ class ImageController extends Controller
 
            return response()->json([
             'message'=>' get Activity with image successfully',
-            'data' => $formedData,
+              'data' => $formedData,
 
         ],201);
     }
