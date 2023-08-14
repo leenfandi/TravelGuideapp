@@ -69,13 +69,13 @@ class ImageController extends Controller
         }*/
 
 
-        return response()->json([
-            'message'=>'Activity added successfully',
+       // return response()->json([
+         //   'message'=>'Activity added successfully',
 
-        ],201);
+     //   ],201);
 
 
-    }
+  //  }
     public function get_Activity_With_Image($activity_id){
 
 
