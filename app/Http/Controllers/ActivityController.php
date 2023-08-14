@@ -181,7 +181,7 @@ public function getallactivities()
 {
     $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude' , 'admin_id' , 'guide_id')
     ->paginate(10);
-
+/////k
 
     $formedData = [];
 
