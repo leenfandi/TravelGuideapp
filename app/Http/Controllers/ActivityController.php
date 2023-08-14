@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Admin;
 use App\Models\City;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
@@ -20,6 +22,7 @@ class ActivityController extends Controller
 
     }
 
+
     public function AddActivity(Request $request)
     {
         $validator =Validator::make($request->all(),[
@@ -29,7 +32,8 @@ class ActivityController extends Controller
             'description'=>'required',
             'price' => 'required' ,
             'latitude' => 'required' ,
-            'longitude' => 'required'
+            'longitude' => 'required' ,
+
 
         ]);
 
@@ -40,6 +44,16 @@ class ActivityController extends Controller
         $activity=Activity::create(array_merge(
             $validator->validated()
         ));
+        if($request->has('images')){
+        $images = [];
+        foreach($request->images as $image)
+        {
+            $images[] = Image::create([
+                'activity_id' => $activity->id ,
+                'url' => $image
+            ]);
+        }}
+
 
 
         return response()->json([
@@ -69,6 +83,7 @@ public function GetNearbyByLocation (Request $request)
      }
 
      return response()->json([
+        'message'=>'Nearby activities',
         'data'=>$activities,
 
     ],201);
@@ -94,38 +109,74 @@ public function addRegion (Request $request)
     ]);
 
     return response()->json([
-        'data'=>$region,
+     'data'=> $region,
 
     ],201);
 }
+
+public function GetAllCities()
+{
+    $cities = City::all();
+
+    return response()->json([
+        $cities
+
+    ],200);
+}
+
+public function GetAllRegions()
+{
+    $regions = Region::all();
+
+    return response()->json([
+        $regions
+
+    ],200);
+}
+
+public function GetRegionsInCity ($city_id)
+{
+    $regions = Region::where('city_id' , $city_id)->get();
+
+    return response()->json([
+        $regions
+    ],200);
+}
+
+public function GetEverything()
+{
+    $cities = City::all();
+
+    foreach($cities as $city)
+    {
+        $city->regions = Region::where('city_id' , $city->id)->get();
+    }
+
+    return response()->json([
+        'cities ' => $cities
+    ],200);
+}
+
 public function getallactivities()
 {
-    $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude')->get();
+    $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude')
+    ->paginate(10);
+
 
     $formedData = [];
 
     foreach ($activities as $activity) {
-        
-        $urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
 
-        $activityData = [
-            'url' => $urls,
-            'activity_id' => $activity->id,
-            'region_id' => $activity->region_id,
-            'name' => $activity->name,
-            'type' => $activity->type,
-            'description' => $activity->description,
-            'price' => $activity->price,
-            'latitude' => $activity->latitude,
-            'longitude' => $activity->longitude
-        ];
+        $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+        $activity->region = Region::where('id'  ,$activity->region_id)->first();
+        $activity->city = City::where('id' , $activity->region->city_id)->first();
+        $activity->user = Admin::where('id , ');
 
-        $formedData[] = $activityData;
     }
 
     return response()->json([
         'message' => 'Get activities with images successfully',
-        'data' => $formedData
+        'data' => $activities
     ], 201);
 }
 

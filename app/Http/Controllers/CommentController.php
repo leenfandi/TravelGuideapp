@@ -143,13 +143,13 @@ class CommentController extends Controller
         }
 }
 
-public function showcomment($activity_id)
+public function showcomment(Request $request)
     {
-        $activity = Activity::where('id', $activity_id)->first();
+        $activity = Activity::where('id', $request->activity_id)->first();
 
         if($activity)
         {
-            $comments = Comment::where('activities_id' , $activity_id)->get();
+            $comments = Comment::where('activities_id' , $request->activity_id)->get();
 
             foreach($comments as $comment)
             {
