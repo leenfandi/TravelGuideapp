@@ -72,6 +72,7 @@ Route::group([
     Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
     Route::get('getactivity',[ActivityController::class,'getallactivities']);
+    
 });
 
 

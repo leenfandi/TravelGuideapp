@@ -39,19 +39,9 @@ class ImageController extends Controller
         ]);
     }
 
-       /* if ($validator->fails())
-        {
-            return response()->json($validator->errors()->toJson(),400);
-        }*/
+}
 
 
-        return response()->json([
-            'message'=>'Activity added successfully',
-
-        ],201);
-
-
-    }
     public function get_Activity_With_Image($activity_id){
 
 
