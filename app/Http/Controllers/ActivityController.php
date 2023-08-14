@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Admin;
 use App\Models\City;
+use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -41,8 +43,10 @@ class ActivityController extends Controller
         {
             return response()->json($validator->errors()->toJson(),400);
         }
+        if(Auth::guard('admin-api')->user()){
         $activity=Activity::create(array_merge(
-            $validator->validated()
+            $validator->validated() ,
+             [ 'admin_id' => Auth::guard('admin-api')->id()]
         ));
         if($request->has('images')){
         $images = [];
@@ -53,6 +57,22 @@ class ActivityController extends Controller
                 'url' => $image
             ]);
         }}
+    }
+         if(Auth::guard('guide-api')->user()){
+            $activity=Activity::create(array_merge(
+            $validator->validated()  ,
+              ['guide_id' => Auth::guard('guide-api')->id()]
+             ));
+             if($request->has('images')){
+                 $images = [];
+                foreach($request->images as $image)
+                 {
+            $images[] = Image::create([
+                'activity_id' => $activity->id ,
+                'url' => $image
+            ]);
+             }}
+         }
 
 
 
@@ -159,18 +179,23 @@ public function GetEverything()
 
 public function getallactivities()
 {
-    $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude')
+    $activities = Activity::select('id','region_id', 'name', 'type', 'description', 'price', 'latitude', 'longitude' , 'admin_id' , 'guide_id')
     ->paginate(10);
 
 
     $formedData = [];
 
     foreach ($activities as $activity) {
-
+        $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
         $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
-        $activity->user = Admin::where('id , ');
+        if($activity->admin_id != null){
+            $activity->admin = Admin::where('id' , $activity->admin_id)->first();
+        }
+        if($activity->guide_id != null){
+            $activity->guide = Guide::where('id' , $activity->guide_id)->first();
+        }
 
     }
 

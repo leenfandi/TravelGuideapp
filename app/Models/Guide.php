@@ -96,5 +96,9 @@ class Guide extends Authenticatable implements JWTSubject
         {
             return $this->hasMany(guide_rates::class);
         }
+        public function activities() : HasMany
+         {
+            return $this->hasMany(Activity::class);
+         }
     }
 

@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('region_id');
+            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('guide_id')->nullable();
             $table->string('name');
             $table->string('type');
             $table->text('description');
@@ -24,6 +26,8 @@ return new class extends Migration
             $table->float('longitude');
 
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            $table->foreign('guide_id')->references('id')->on('guides')->onDelete('cascade');
             $table->timestamps();
         });
     }

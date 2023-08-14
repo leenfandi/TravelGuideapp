@@ -68,15 +68,19 @@ Route::group([
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
     Route::get('showcomment',[CommentController::class, 'showcomment']);
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
-   // Route::get('showcomment/{activity_id}',[CommentController::class, 'listcomment']);
-    Route::post('addimage',[ImageController::class, 'Addimage']);
     Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
     Route::get('get_all_users',[AdminAuthController::class,'getProfile_of_users']);
     Route::delete('delete_any_guide/{id}',[AdminAuthController::class,'delete_any_guide']);
     Route::delete('delete_any_user/{id}',[AdminAuthController::class,'delete_any_user']);
     Route::get('getactivity',[ActivityController::class,'getallactivities']);
-    
+    Route::post('addcity',[ActivityController::class, 'addCity']);
+    Route::post('addregion',[ActivityController::class, 'addRegion']);
+    Route::get('getcities',[ActivityController::class,'GetAllCities']);
+    Route::get('getregions',[ActivityController::class,'GetAllRegions']);
+    Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+    Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+
 });
 
 
@@ -93,7 +97,6 @@ Route::group([
     Route::post('addrate',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
-   // Route::get('getactivity/{id}',[ImageController::class, 'add_Activity_With_Image']);
     Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
     Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);

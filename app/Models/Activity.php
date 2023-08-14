@@ -21,7 +21,9 @@ class Activity extends Model
         //'time',
         'price',
         'latitude' ,
-        'longitude'
+        'longitude' ,
+        'admin_id' ,
+        'guide_id'
 
     ];
 
@@ -46,5 +48,13 @@ class Activity extends Model
     public function bookmarks() : HasMany
     {
         return $this->hasMany(Bookmark::class);
+    }
+    public function admin() : BelongsTo
+    {
+        return $this->belongsTo(Admin::class);
+    }
+    public function guide() : BelongsTo
+    {
+        return $this->belongsTo(Guide::class);
     }
 }

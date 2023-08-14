@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Guide_Rates;
 use Illuminate\Support\Facades\DB;
 
 class AdminAuthController extends Controller
@@ -147,7 +148,7 @@ class AdminAuthController extends Controller
 
         public function getProfile_of_guides()
         {
-            $guides = Guide::select('id', 'name', 'gender', 'age', 'yearsofExperience', 'image', 'location')->get();
+            $guides = Guide::select('id', 'name', 'gender', 'age', 'yearsofExperience', 'image', 'location' , 'bio')->get();
 
             $response = [];
 
@@ -160,7 +161,9 @@ class AdminAuthController extends Controller
                     'image' => $image,
                     'age' => $guide->age,
                     'yearsofExperience' => $guide->yearsofExperience,
-                    'location' => $guide->location
+                    'location' => $guide->location ,
+                    'bio' => $guide->bio ,
+                    'rating' => round(Guide_Rates::where('guide_id' , $guide->id)->avg('rate'),1)
                 ];
             }
 
