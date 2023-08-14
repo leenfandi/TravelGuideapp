@@ -81,6 +81,7 @@ Route::group([
     Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
+    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
 
 });
 
@@ -110,6 +111,7 @@ Route::group([
     Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
+    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
 
 });
 
@@ -143,6 +145,7 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
        Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
        Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
+        Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
 
        Route::post('change_password',[RegisterController::class,'changePassword']);
 
