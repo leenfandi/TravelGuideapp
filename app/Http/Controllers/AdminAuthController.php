@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guide;
 use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -165,6 +166,62 @@ class AdminAuthController extends Controller
 
             return response()->json($response);
         }
+        public function getProfile_of_users()
+        {
+            $users = User::select('id', 'name', 'email',  'image', 'number')->get();
+
+            $response = [];
+
+            foreach ($users as $user) {
+                $image = is_null($user->image) ? 'null' : asset($user->image);
+
+                $response[] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'image' => $image,
+                   'number' => $user->number,
+                ];
+            }
+
+            return response()->json($response);
+        }
+        public function delete_any_guide($id){
+
+            $guide = Guide::find($id);
+            $result = $guide->delete();
+            if($result){
+                return response()->json([
+                    'message'=>' A guide Deleted Successfully'
+                ],201);
+             } else{
+                return response()->json([
+                    'message'=>'Guide Not Founded '
+                ],400);
+                }
+
+
+
+
+
+        }
+        public function delete_any_user($id){
+            $user = User::find($id);
+            $result = $user->delete();
+            if($result){
+                return response()->json([
+                    'message'=>' A user Deleted Successfully'
+                ],201);
+             } else{
+                return response()->json([
+                    'message'=>'User Not Deleted '
+                ],400);
+                }
+
+
+
+        }
+
 
     }
 
