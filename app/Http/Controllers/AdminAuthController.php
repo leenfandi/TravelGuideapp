@@ -220,31 +220,70 @@ class AdminAuthController extends Controller
                     'message'=>'User Not Deleted '
                 ],400);
                 }
+        }
 
+        public function getuser($user_id)
+        {
+            $user = User::select('id', 'name', 'email', 'number', 'image')->where('id', $user_id)->first();
 
+            if ($user) {
+                $image = is_null($user->image) ? 'null' : asset($user->image);
 
+                $userData = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'number' => $user->number,
+                    'image' => $image,
+                ];
+
+                return response()->json([
+                    'message' => 'User you needed is',
+                    'user' => $userData,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'User not found',
+                ], 404);
+            }
+        }
+
+        public function getguide($guide_id)
+        {
+            $guide = Guide::select('id', 'name', 'email', 'image','gender',
+            'age', 'yearsofExperience', 'location','bio'
+             )->where('id', $guide_id)->first();
+
+            if ($guide) {
+                $image = is_null($guide->image) ? 'null' : asset($guide->image);
+
+                $guideData = [
+                    'id' => $guide->id,
+                    'name' => $guide->name,
+                    'email' => $guide->email,
+                    'gender' => $guide->number,
+                    'image' => $image,
+                    'age'=> $guide->age,
+                    'yearsofExperience' => $guide -> yearsofExperience,
+                   'location' => $guide ->location,
+                    'bio' => $guide->bio ,
+                    'rating' => round(Guide_Rates::where('guide_id' , $guide->id)->avg('rate'),1)
+                ];
+
+                return response()->json([
+                    'message' => 'User you needed is',
+                    'user' => $guideData,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'User not found',
+                ], 404);
+            }
         }
 
 
     }
 
-
-        /**
-         * Refresh a token.
-         *
-         * @return \Illuminate\Http\JsonResponse
-         */
-       /* public function refresh()
-        {
-            return $this->respondWithToken(auth()->refresh());
-        }
-        /**
-         * Get the token array structure.
-         *
-         * @param  string $token
-         *
-         * @return \Illuminate\Http\JsonResponse
-         */
 
 
 
