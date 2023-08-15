@@ -40,14 +40,14 @@ class ImageController extends Controller
     }
 
 
-    public function get_Activity_With_Image($activity_id){
+    public function get_Activity_With_Image(Request $request){
 
 
-        $activity = Activity::where('id' , $activity_id)->first();
+        $activity = Activity::where('id' , $request->activity_id)->first();
         if($activity)
         {
             $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
-            $activity->urls=Image::select('url')->where('activity_id',$activity_id)
+            $activity->urls=Image::select('url')->where('activity_id',$request->activity_id)
             ->orderBy('id','desc')->get();
             $activity->region = Region::where('id'  ,$activity->region_id)->first();
             $activity->city = City::where('id' , $activity->region->city_id)->first();

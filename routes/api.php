@@ -68,7 +68,7 @@ Route::group([
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
     Route::get('showcomment',[CommentController::class, 'showcomment']);
     Route::delete('deletecomment/{activity_id}',[CommentController::class, 'deletecomment']);
-    Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
+    Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
     Route::get('get_all_users',[AdminAuthController::class,'getProfile_of_users']);
     Route::delete('delete_any_guide/{id}',[AdminAuthController::class,'delete_any_guide']);
@@ -78,10 +78,10 @@ Route::group([
     Route::post('addregion',[ActivityController::class, 'addRegion']);
     Route::get('getcities',[ActivityController::class,'GetAllCities']);
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
-    Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+    Route::post('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
-    Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
-    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
+    Route::post('getguide',[AdminAuthController::class,'getguide']);
+    Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getimage',[ImageController::class,'getImage']);
 
 });
@@ -109,10 +109,10 @@ Route::group([
     Route::get('getactivity',[ActivityController::class,'getallactivities']);
     Route::get('getcities',[ActivityController::class,'GetAllCities']);
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
-    Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+    Route::get('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
-    Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
-    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
+    Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
+    Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getimage',[ImageController::class,'getImage']);
 
 });
@@ -143,11 +143,10 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getactivity',[ActivityController::class,'getallactivities']);
        Route::get('getcities',[ActivityController::class,'GetAllCities']);
        Route::get('getregions',[ActivityController::class,'GetAllRegions']);
-       Route::get('getregionsincity/{city_id}',[ActivityController::class,'GetRegionsInCity']);
+       Route::get('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
        Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
-       Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
-       Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
-        Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
+       Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
+       Route::post('getguide',[AdminAuthController::class,'getguide']);
         Route::post('getimage',[ImageController::class,'getImage']);
 
        Route::post('change_password',[RegisterController::class,'changePassword']);

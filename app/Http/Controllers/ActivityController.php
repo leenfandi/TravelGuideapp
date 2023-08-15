@@ -156,9 +156,9 @@ public function GetAllRegions()
     ],200);
 }
 
-public function GetRegionsInCity ($city_id)
+public function GetRegionsInCity (Request $request)
 {
-    $regions = Region::where('city_id' , $city_id)->get();
+    $regions = Region::where('city_id' , $request->city_id)->get();
 
     return response()->json([
         'message'=>'Regions in the city',
