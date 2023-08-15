@@ -139,7 +139,8 @@ public function GetAllCities()
     $cities = City::all();
 
     return response()->json([
-        $cities
+        'message'=>'All Cities',
+        'data' =>  $cities
 
     ],200);
 }
@@ -149,7 +150,8 @@ public function GetAllRegions()
     $regions = Region::all();
 
     return response()->json([
-        $regions
+        'message'=>'All regions',
+        'data' => $regions
 
     ],200);
 }
@@ -159,7 +161,8 @@ public function GetRegionsInCity ($city_id)
     $regions = Region::where('city_id' , $city_id)->get();
 
     return response()->json([
-        $regions
+        'message'=>'Regions in the city',
+        'data' => $regions
     ],200);
 }
 
@@ -173,7 +176,8 @@ public function GetEverything()
     }
 
     return response()->json([
-        'cities ' => $cities
+        'message'=>'All regions in all cities',
+        'data ' => $cities
     ],200);
 }
 

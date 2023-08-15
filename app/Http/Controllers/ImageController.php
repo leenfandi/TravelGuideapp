@@ -9,9 +9,12 @@ use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
-use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
@@ -36,47 +39,7 @@ class ImageController extends Controller
                   ],201);
     }
 
-    /*
-    public function Addimage(Request $request)
-    {
-        $input = $request->all();
-       $image = new Image();
 
-       $image->activity_id = $input['activity_id'];
-
-        if ($request->url && $request->url->isValid()){
-
-            //  $photo=$request->url;
-              $file_extension = $request->url->extension();
-                $file_name = time() . '.' . $file_extension;
-                $request->url->move(public_path('images/activity_images'), $file_name);
-                $path = "public/images/activity_images/$file_name";
-                $image->url = $path;
-
-
-
-          $image->save();
-
-          return response()->json([
-            'message'=>'image added succefully',
-            'image'=>$image,
-
-        ]);
-    }
-
-       /* if ($validator->fails())
-        {
-            return response()->json($validator->errors()->toJson(),400);
-        }*/
-
-
-       // return response()->json([
-         //   'message'=>'Activity added successfully',
-
-     //   ],201);
-
-
-  //  }
     public function get_Activity_With_Image($activity_id){
 
 
@@ -102,10 +65,22 @@ class ImageController extends Controller
         ],201);
     }
 
+    public function getImage(Request $request)
+{
+    $path = $request->get('path');
 
+    $image = File::get($path);
 
+    $base64Image = base64_encode($image);
 
+    /*return response()->json([
+        'image' => 'data:image/png;base64,' . $base64Image,
 
+    ]);*/
+
+    return Response::make($image , 200);
+
+}
     }
 
 
