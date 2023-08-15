@@ -266,7 +266,7 @@ class AdminAuthController extends Controller
                     'age'=> $guide->age,
                     'yearsofExperience' => $guide -> yearsofExperience,
                    'location' => $guide ->location,
-                    'bio' => $guide->bio ,
+                   'bio' => $guide->bio ,
                     'rating' => round(Guide_Rates::where('guide_id' , $guide->id)->avg('rate'),1)
                 ];
 
