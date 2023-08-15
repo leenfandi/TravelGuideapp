@@ -139,7 +139,8 @@ public function GetAllCities()
     $cities = City::all();
 
     return response()->json([
-        $cities
+        'meesage' => 'Data get Successfuly',
+       'cities'=> $cities
 
     ],200);
 }
@@ -149,7 +150,8 @@ public function GetAllRegions()
     $regions = Region::all();
 
     return response()->json([
-        $regions
+        'meesage' => 'Data get Successfuly',
+       'cities'=> $regions
 
     ],200);
 }

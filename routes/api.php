@@ -145,8 +145,8 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
        Route::get('getactivity/{activity_id}',[ImageController::class, 'get_Activity_With_Image']);
        Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
-        Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
-
+       Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
+       Route::get('getimage/{path}',[ImageController::class,'getImage']);
        Route::post('change_password',[RegisterController::class,'changePassword']);
 
     });

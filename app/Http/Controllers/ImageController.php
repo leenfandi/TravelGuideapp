@@ -11,6 +11,7 @@ use App\Models\Rate;
 use App\Models\Region;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
@@ -103,6 +104,21 @@ class ImageController extends Controller
     }
 
 
+   public function getImage($path)
+{
+    $filePath = 'public/' . $path;
+
+    if (Storage::exists($filePath)) {
+        $file = Storage::get($filePath);
+        $mimeType = Storage::mimeType($filePath);
+
+        return response($file, 200)->header('Content-Type', $mimeType);
+    } else {
+        return response()->json([
+            'message' => 'Image not found',
+        ], 404);
+    }
+}
 
 
 
