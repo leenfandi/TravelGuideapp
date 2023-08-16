@@ -84,7 +84,7 @@ Route::group([
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
-
+   
 });
 
 
