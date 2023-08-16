@@ -82,22 +82,21 @@ class ImageController extends Controller
         ],200);
     }
 
-    public function getImage(Request $request)
-{
-    $path = $request->get('path');
+    public function getImage($foldeName ,$filename)
+    {
+        $path = public_path('images') . '/' . $foldeName . '/' . $filename;
 
-    $image = File::get($path);
+        if (!File::exists($path)) {
+            abort(404);
+        }
 
     $base64Image = base64_encode($image);
-///
+
     /*return response()->json([
         'image' => 'data:image/png;base64,' . $base64Image,
 
-    ]);*/
-
-    return Response::make($image , 200);
-
-}
+        return $response;
+    }
     }
 
 
