@@ -82,7 +82,7 @@ Route::group([
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
     Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
-
+   
 });
 
 

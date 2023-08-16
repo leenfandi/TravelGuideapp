@@ -159,6 +159,7 @@ class AdminAuthController extends Controller
                     'id' => $guide->id,
                     'name' => $guide->name,
                     'image' => $image,
+                    'gender' => $guide->gender,
                     'age' => $guide->age,
                     'yearsofExperience' => $guide->yearsofExperience,
                     'location' => $guide->location ,
