@@ -9,10 +9,12 @@ use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
-use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class ImageController extends Controller
 {
@@ -20,6 +22,7 @@ class ImageController extends Controller
     public function AddImages(Request $request)
     {
         $paths = [];
+        if($request->type == 'activity'){
         foreach($request->images as $image){
 
              $file_extension = $image->extension();
@@ -29,6 +32,19 @@ class ImageController extends Controller
                 $paths[] = $path;
 
             }
+        }
+        if($request->type == 'region'){
+            foreach($request->images as $image){
+
+                 $file_extension = $image->extension();
+                    $file_name = time() . rand(1,100) .'.' . $file_extension;
+                    $image->move(public_path('images/region_images'), $file_name);
+                    $path = "public/images/region_images/$file_name";
+                    $paths[] = $path;
+
+                }
+            }
+
 
        return response()->json([
                 'message'=>'Images added successfully',
@@ -37,91 +53,51 @@ class ImageController extends Controller
                   ],201);
     }
 
-    /*
-    public function Addimage(Request $request)
-    {
-        $input = $request->all();
-       $image = new Image();
 
-       $image->activity_id = $input['activity_id'];
-
-        if ($request->url && $request->url->isValid()){
-
-            //  $photo=$request->url;
-              $file_extension = $request->url->extension();
-                $file_name = time() . '.' . $file_extension;
-                $request->url->move(public_path('images/activity_images'), $file_name);
-                $path = "public/images/activity_images/$file_name";
-                $image->url = $path;
+    public function get_Activity_With_Image(Request $request){
 
 
-
-          $image->save();
-
-          return response()->json([
-            'message'=>'image added succefully',
-            'image'=>$image,
-
-        ]);
-    }
-
-       /* if ($validator->fails())
-        {
-            return response()->json($validator->errors()->toJson(),400);
-        }*/
-
-
-       // return response()->json([
-         //   'message'=>'Activity added successfully',
-
-     //   ],201);
-
-
-  //  }
-    public function get_Activity_With_Image($activity_id){
-
-
-        $activity = Activity::where('id' , $activity_id)->first();
+        $activity = Activity::where('id' , $request->activity_id)->first();
         if($activity)
         {
             $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
-            $activity->urls=Image::select('url')->where('activity_id',$activity_id)
+            $activity->urls=Image::select('url')->where('activity_id',$request->activity_id)
             ->orderBy('id','desc')->get();
             $activity->region = Region::where('id'  ,$activity->region_id)->first();
             $activity->city = City::where('id' , $activity->region->city_id)->first();
             if($activity->admin_id != null){
-                $activity->admin = Admin::where('id' , $activity->admin_id)->first();
+                $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+                $activity->user->image = null;
+                $activity->user->type = 'admin';
             }
             if($activity->guide_id != null){
-                $activity->guide = Guide::where('id' , $activity->guide_id)->first();
+                $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+                $activity->user->type = 'guide';
             }
         }
            return response()->json([
             'message'=>' get Activity with image successfully',
               'data' => $activity,
 
-        ],201);
+        ],200);
     }
 
-
-   public function getImage($path)
+    public function getImage(Request $request)
 {
-    $filePath = 'public/' . $path;
+    $path = $request->get('path');
 
-    if (Storage::exists($filePath)) {
-        $file = Storage::get($filePath);
-        $mimeType = Storage::mimeType($filePath);
+    $image = File::get($path);
 
-        return response($file, 200)->header('Content-Type', $mimeType);
-    } else {
-        return response()->json([
-            'message' => 'Image not found',
-        ], 404);
-    }
+    $base64Image = base64_encode($image);
+
+    /*return response()->json([
+        'image' => 'data:image/png;base64,' . $base64Image,
+
+    ]);*/
+
+    return Response::make($image , 200);
+
 }
-
-
-
     }
 
 

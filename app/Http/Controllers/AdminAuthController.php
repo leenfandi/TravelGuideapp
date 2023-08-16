@@ -223,9 +223,9 @@ class AdminAuthController extends Controller
                 }
         }
 
-        public function getuser($user_id)
+        public function getuser(Request $request)
         {
-            $user = User::select('id', 'name', 'email', 'number', 'image')->where('id', $user_id)->first();
+            $user = User::select('id', 'name', 'email', 'number', 'image')->where('id', $request->user_id)->first();
 
             if ($user) {
                 $image = is_null($user->image) ? 'null' : asset($user->image);
@@ -249,11 +249,11 @@ class AdminAuthController extends Controller
             }
         }
 
-        public function getguide($guide_id)
+        public function getguide(Request $request)
         {
             $guide = Guide::select('id', 'name', 'email', 'image','gender',
             'age', 'yearsofExperience', 'location','bio'
-             )->where('id', $guide_id)->first();
+             )->where('id', $request->guide_id)->first();
 
             if ($guide) {
                 $image = is_null($guide->image) ? 'null' : asset($guide->image);

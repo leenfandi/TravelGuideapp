@@ -9,6 +9,7 @@ use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
+use App\Models\Region_Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -127,6 +128,15 @@ public function addRegion (Request $request)
         'city_id' => $request->city_id ,
         'name' => $request->name
     ]);
+    if($request->has('images')){
+        $images = [];
+        foreach($request->images as $image)
+        {
+            $images[] = Region_Image::create([
+                'region_id' => $region->id ,
+                'url' => $image
+            ]);
+        }}
 
     return response()->json([
      'data'=> $region,
@@ -139,8 +149,8 @@ public function GetAllCities()
     $cities = City::all();
 
     return response()->json([
-        'meesage' => 'Data get Successfuly',
-       'cities'=> $cities
+        'message'=>'All Cities',
+        'data' =>  $cities
 
     ],200);
 }
@@ -149,19 +159,28 @@ public function GetAllRegions()
 {
     $regions = Region::all();
 
+    foreach($regions as $region){
+        $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
+        }
+
     return response()->json([
-        'meesage' => 'Data get Successfuly',
-       'cities'=> $regions
+        'message'=>'All regions',
+        'data' => $regions
 
     ],200);
 }
 
-public function GetRegionsInCity ($city_id)
+public function GetRegionsInCity (Request $request)
 {
-    $regions = Region::where('city_id' , $city_id)->get();
+    $regions = Region::where('city_id' , $request->city_id)->get();
+
+    foreach($regions as $region){
+    $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
+    }
 
     return response()->json([
-        $regions
+        'message'=>'Regions in the city',
+        'data' => $regions
     ],200);
 }
 
@@ -175,7 +194,8 @@ public function GetEverything()
     }
 
     return response()->json([
-        'cities ' => $cities
+        'message'=>'All regions in all cities',
+        'data ' => $cities
     ],200);
 }
 
@@ -193,10 +213,13 @@ public function getallactivities()
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
         if($activity->admin_id != null){
-            $activity->admin = Admin::where('id' , $activity->admin_id)->first();
+            $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+            $activity->user->image = null;
+            $activity->user->type = 'admin';
         }
         if($activity->guide_id != null){
-            $activity->guide = Guide::where('id' , $activity->guide_id)->first();
+            $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+            $activity->user->type = 'guide';
         }
 
     }
@@ -204,7 +227,25 @@ public function getallactivities()
     return response()->json([
         'message' => 'Get activities with images successfully',
         'data' => $activities
-    ], 201);
+    ], 200);
 }
+
+    public function GetGuideActivities (Request $request)
+    {
+        $activities = Activity::where('guide_id' , $request->guide_id)->paginate(5);
+        foreach ($activities as $activity) {
+            $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+            $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+            $activity->region = Region::where('id'  ,$activity->region_id)->first();
+            $activity->city = City::where('id' , $activity->region->city_id)->first();
+        }
+
+        return response()->json([
+            'message' => 'Get activities successfully' ,
+            'data' => $activities
+        ]);
+
+
+    }
 
     }

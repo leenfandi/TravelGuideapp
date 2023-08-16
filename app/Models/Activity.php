@@ -17,8 +17,6 @@ class Activity extends Model
         'name',
         'type',
         'description',
-        //'distance',
-        //'time',
         'price',
         'latitude' ,
         'longitude' ,
