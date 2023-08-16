@@ -52,17 +52,20 @@ class ImageController extends Controller
             $activity->region = Region::where('id'  ,$activity->region_id)->first();
             $activity->city = City::where('id' , $activity->region->city_id)->first();
             if($activity->admin_id != null){
-                $activity->admin = Admin::where('id' , $activity->admin_id)->first();
+                $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+                $activity->user->image = null;
+                $activity->user->type = 'admin';
             }
             if($activity->guide_id != null){
-                $activity->guide = Guide::where('id' , $activity->guide_id)->first();
+                $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+                $activity->user->type = 'guide';
             }
         }
            return response()->json([
             'message'=>' get Activity with image successfully',
               'data' => $activity,
 
-        ],201);
+        ],200);
     }
 
     public function getImage(Request $request)

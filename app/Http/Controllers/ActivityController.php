@@ -195,10 +195,13 @@ public function getallactivities()
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
         if($activity->admin_id != null){
-            $activity->admin = Admin::where('id' , $activity->admin_id)->first();
+            $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+            $activity->user->image = null;
+            $activity->user->type = 'admin';
         }
         if($activity->guide_id != null){
-            $activity->guide = Guide::where('id' , $activity->guide_id)->first();
+            $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+            $activity->user->type = 'guide';
         }
 
     }
@@ -206,7 +209,25 @@ public function getallactivities()
     return response()->json([
         'message' => 'Get activities with images successfully',
         'data' => $activities
-    ], 201);
+    ], 200);
 }
+
+    public function GetGuideActivities (Request $request)
+    {
+        $activities = Activity::where('guide_id' , $request->guide_id)->paginate(5);
+        foreach ($activities as $activity) {
+            $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+            $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+            $activity->region = Region::where('id'  ,$activity->region_id)->first();
+            $activity->city = City::where('id' , $activity->region->city_id)->first();
+        }
+
+        return response()->json([
+            'message' => 'Get activities successfully' ,
+            'data' => $activities
+        ]);
+
+
+    }
 
     }

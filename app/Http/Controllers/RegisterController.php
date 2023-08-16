@@ -184,4 +184,15 @@ class RegisterController extends Controller
                 ] ,400);
 }
 }
+    public function DeleteMyAccount()
+    {
+        $user = Auth::guard('api')->user();
+            User::where('id' , $user->id)->delete();
+            Auth::logout();
+
+        return response()->json([
+            'message' => 'Account deleted Successsfuly'
+        ]);
+
+    }
 }
