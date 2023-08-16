@@ -38,5 +38,9 @@ class Region extends Model
         {
             return $this->hasMany(SearchHistory::class);
         }
+        public function region_images() : HasMany
+        {
+            return $this->hasMany(Region_Image::class);
+        }
     }
 
