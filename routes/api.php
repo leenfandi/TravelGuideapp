@@ -23,7 +23,7 @@ use App\Http\Controllers\SearchController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get('public/images/{folderName}/{filename}',[ImageController::class,'getImage']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -82,7 +82,6 @@ Route::group([
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
-    Route::post('getimage',[ImageController::class,'getImage']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
 
 });
@@ -114,7 +113,6 @@ Route::group([
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
-    Route::post('getimage',[ImageController::class,'getImage']);
 
 });
 
@@ -148,7 +146,6 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
        Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
        Route::post('getguide',[AdminAuthController::class,'getguide']);
-        Route::post('getimage',[ImageController::class,'getImage']);
         Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
 
        Route::post('change_password',[RegisterController::class,'changePassword']);
