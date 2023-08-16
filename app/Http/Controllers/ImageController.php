@@ -22,6 +22,7 @@ class ImageController extends Controller
     public function AddImages(Request $request)
     {
         $paths = [];
+        if($request->type == 'activity'){
         foreach($request->images as $image){
 
              $file_extension = $image->extension();
@@ -31,6 +32,19 @@ class ImageController extends Controller
                 $paths[] = $path;
 
             }
+        }
+        if($request->type == 'region'){
+            foreach($request->images as $image){
+
+                 $file_extension = $image->extension();
+                    $file_name = time() . rand(1,100) .'.' . $file_extension;
+                    $image->move(public_path('images/region_images'), $file_name);
+                    $path = "public/images/region_images/$file_name";
+                    $paths[] = $path;
+
+                }
+            }
+
 
        return response()->json([
                 'message'=>'Images added successfully',

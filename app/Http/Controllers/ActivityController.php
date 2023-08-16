@@ -9,6 +9,7 @@ use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
 use App\Models\Region;
+use App\Models\Region_Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -127,6 +128,15 @@ public function addRegion (Request $request)
         'city_id' => $request->city_id ,
         'name' => $request->name
     ]);
+    if($request->has('images')){
+        $images = [];
+        foreach($request->images as $image)
+        {
+            $images[] = Region_Image::create([
+                'region_id' => $region->id ,
+                'url' => $image
+            ]);
+        }}
 
     return response()->json([
      'data'=> $region,
@@ -149,6 +159,10 @@ public function GetAllRegions()
 {
     $regions = Region::all();
 
+    foreach($regions as $region){
+        $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
+        }
+
     return response()->json([
         'message'=>'All regions',
         'data' => $regions
@@ -159,6 +173,10 @@ public function GetAllRegions()
 public function GetRegionsInCity (Request $request)
 {
     $regions = Region::where('city_id' , $request->city_id)->get();
+
+    foreach($regions as $region){
+    $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
+    }
 
     return response()->json([
         'message'=>'Regions in the city',
