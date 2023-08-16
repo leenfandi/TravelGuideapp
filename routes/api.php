@@ -81,9 +81,14 @@ Route::group([
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
     Route::post('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
+<<<<<<< HEAD
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
+=======
+    Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
+    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
+>>>>>>> 16288ee (16/8/2023)
    
 });
 
