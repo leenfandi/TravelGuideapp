@@ -89,7 +89,7 @@ class ImageController extends Controller
     $image = File::get($path);
 
     $base64Image = base64_encode($image);
-
+///
     /*return response()->json([
         'image' => 'data:image/png;base64,' . $base64Image,
 
