@@ -33,7 +33,6 @@ class AdminAuthController extends Controller
             'gender' => 'required' ,
             'age' => 'required',
             'yearsofExperience' => 'required',
-            'image' => 'nullable',
             'location'=> 'required',
             'bio' => 'nullable'
 
@@ -42,9 +41,10 @@ class AdminAuthController extends Controller
         {
             return response()->json($validator->errors()->toJson(),400);
         }
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
+        $imagePath = null;
+        if ($request->image != null) {
+            
+            $image = $request->image;
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = 'public/images/guides_images/' . $imageName;
             $image->move(public_path('images/guides_images'), $imageName);
@@ -56,10 +56,9 @@ class AdminAuthController extends Controller
 
         $guide=Guide::create(array_merge(
             $validator->validated(),
-            ['password'=>bcrypt($request->password)]
+            ['password'=>bcrypt($request->password)],
+            ['image'=>$imagePath]
         ));
-        $credentials=$request->only(['email','password']);
-        $token=Auth::guard('guide-api')->attempt($credentials);
 
         return response()->json([
             'type' => 'guide',
@@ -148,27 +147,16 @@ class AdminAuthController extends Controller
 
         public function getProfile_of_guides()
         {
-            $guides = Guide::select('id', 'name', 'gender', 'age', 'yearsofExperience', 'image', 'location' , 'bio')->get();
+            $guides = Guide::select('id', 'name', 'gender', 'age', 'yearsofExperience', 'image', 'location' , 'bio' , 'created_at')->get();
 
-            $response = [];
 
             foreach ($guides as $guide) {
-                $image = is_null($guide->image) ? 'null' : asset($guide->image);
 
-                $response[] = [
-                    'id' => $guide->id,
-                    'name' => $guide->name,
-                    'image' => $image,
-                    'gender' => $guide->gender,
-                    'age' => $guide->age,
-                    'yearsofExperience' => $guide->yearsofExperience,
-                    'location' => $guide->location ,
-                    'bio' => $guide->bio ,
-                    'rating' => round(Guide_Rates::where('guide_id' , $guide->id)->avg('rate'),1)
-                ];
+                $guide->rating = round(Guide_Rates::where('guide_id' , $guide->id)->avg('rate'),1);
+                  
             }
 
-            return response()->json($response);
+            return response()->json($guides);
         }
         public function getProfile_of_users()
         {
@@ -228,14 +216,13 @@ class AdminAuthController extends Controller
             $user = User::select('id', 'name', 'email', 'number', 'image')->where('id', $request->user_id)->first();
 
             if ($user) {
-                $image = is_null($user->image) ? 'null' : asset($user->image);
 
                 $userData = [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                     'number' => $user->number,
-                    'image' => $image,
+                    'image' => $user->image,
                 ];
 
                 return response()->json([
@@ -256,14 +243,13 @@ class AdminAuthController extends Controller
              )->where('id', $request->guide_id)->first();
 
             if ($guide) {
-                $image = is_null($guide->image) ? 'null' : asset($guide->image);
 
                 $guideData = [
                     'id' => $guide->id,
                     'name' => $guide->name,
                     'email' => $guide->email,
                     'gender' => $guide->number,
-                    'image' => $image,
+                    'image' => $guide->image,
                     'age'=> $guide->age,
                     'yearsofExperience' => $guide -> yearsofExperience,
                    'location' => $guide ->location,

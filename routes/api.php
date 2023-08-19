@@ -27,34 +27,21 @@ Route::get('public/images/{folderName}/{filename}',[ImageController::class,'getI
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group([
 
-    'middleware' => 'api',
-
-], function ($router) {
     Route::group([ 'prefix' => 'user', ], function ($router) {
-
-    Route::post('register',[RegisterController::class,'register']);
-    Route::post('login',[RegisterController::class,'login']);
-    Route::post('logout',[RegisterController::class,'logout']);
+        Route::post('register',[RegisterController::class,'register']);
+        Route::post('login',[RegisterController::class,'login']);
      });
 
      Route::group([ 'prefix' => 'admin', ], function ($router) {
-
         Route::post('register',[AdminAuthController::class,'register']);
         Route::post('login',[AdminAuthController::class,'login']);
-        Route::post('logout',[AdminAuthController::class,'logout']);
-
+        
      });
      Route::group([ 'prefix' => 'guide', ], function ($router) {
-
-
         Route::post('login',[GuideAuthController::class,'login']);
-        Route::post('logout',[GuideAuthController::class,'logout']);
-
      });
 
-});
 
 Route::group([
     'middleware' => 'App\Http\Middleware\Admin:admin-api',
@@ -62,7 +49,7 @@ Route::group([
 
 ], function () {
 
-
+    Route::post('logout',[AdminAuthController::class,'logout']);
     Route::post('addguide',[AdminAuthController::class,'addguide']);
     Route::post('addimages',[ImageController::class,'AddImages']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
@@ -80,16 +67,10 @@ Route::group([
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
     Route::post('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
-<<<<<<< HEAD
-    Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
-    Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
-   
-=======
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
 
->>>>>>> 560ffd6deb74c9987447a0b8ae8eb2f66397e9b8
 });
 
 
@@ -98,7 +79,7 @@ Route::group([
     'prefix' => 'for_guide',
 
 ], function () {
-
+    Route::post('logout',[AdminAuthController::class,'logout']);
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
     Route::post('addimages',[ImageController::class,'AddImages']);
@@ -112,6 +93,7 @@ Route::group([
     Route::get('toprated',[RateController::class, 'GetTopRated']);
     Route::post('addcity',[ActivityController::class, 'addCity']);
     Route::post('addregion',[ActivityController::class, 'addRegion']);
+    Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
     Route::get('getactivity',[ActivityController::class,'getallactivities']);
     Route::get('getcities',[ActivityController::class,'GetAllCities']);
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
@@ -130,6 +112,7 @@ Route::get('profile',function(){
 
 Route::middleware('auth:api')->group(function ()
     {
+        Route::post('logout',[AdminAuthController::class,'logout']);
        Route::post('updateprofile',[RegisterController::class,'updateProfile']);
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
        Route::post('comment/{activity_id}',[CommentController::class, 'store']);
@@ -148,6 +131,7 @@ Route::middleware('auth:api')->group(function ()
        Route::get('getactivity',[ActivityController::class,'getallactivities']);
        Route::get('getcities',[ActivityController::class,'GetAllCities']);
        Route::get('getregions',[ActivityController::class,'GetAllRegions']);
+       Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
        Route::get('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
        Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
        Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);

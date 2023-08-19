@@ -91,7 +91,7 @@ public function GetNearbyByLocation (Request $request)
 {
     $latitude = $request->latitude;
     $longitude = $request->longitude;
-    $radius = 20000;
+    $radius = 40;
     $activities = Activity::where('latitude' , '>' , $latitude - $radius)
                         ->where('latitude' , '<' , $latitude + $radius)
                         ->where('longitude' , '>' , $longitude - $radius)
@@ -99,9 +99,20 @@ public function GetNearbyByLocation (Request $request)
 
     foreach($activities as $activity )
     {
-      $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
-      $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
-     }
+        $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+        $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+        $activity->region = Region::where('id'  ,$activity->region_id)->first();
+        $activity->city = City::where('id' , $activity->region->city_id)->first();
+        if($activity->admin_id != null){
+            $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+            $activity->user->image = null;
+            $activity->user->type = 'admin';
+        }
+        if($activity->guide_id != null){
+            $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+            $activity->user->type = 'guide';
+        }
+    }
 
      return response()->json([
         'message'=>'Nearby activities',
@@ -157,7 +168,7 @@ public function GetAllCities()
 
 public function GetAllRegions()
 {
-    $regions = Region::all();
+    $regions = Region::with("city")->get();
 
     foreach($regions as $region){
         $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();

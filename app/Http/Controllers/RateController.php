@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Admin;
+use App\Models\City;
+use App\Models\Region;
+use App\Models\Region_Image;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class RateController extends Controller
 {
@@ -86,8 +92,19 @@ class RateController extends Controller
 
        foreach($activities as $activity )
        {
-            $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
-            $activity->image = Image::select('url')->where('activity_id' , $activity->id)->first();
+        $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+        $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+        $activity->region = Region::where('id'  ,$activity->region_id)->first();
+        $activity->city = City::where('id' , $activity->region->city_id)->first();
+        if($activity->admin_id != null){
+            $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+            $activity->user->image = null;
+            $activity->user->type = 'admin';
+        }
+        if($activity->guide_id != null){
+            $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+            $activity->user->type = 'guide';
+        }
        }
           $topRated = $activities->sortByDesc('rating')->take(10);
 
