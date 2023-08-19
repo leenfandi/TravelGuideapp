@@ -25,7 +25,7 @@ class ImageController extends Controller
         if($request->type == 'activity'){
         foreach($request->images as $image){
 
-             $file_extension = $image->extension();
+                $file_extension = $image->extension();
                 $file_name = time() . rand(1,100) .'.' . $file_extension;
                 $image->move(public_path('images/activity_images'), $file_name);
                 $path = "public/images/activity_images/$file_name";
@@ -90,10 +90,11 @@ class ImageController extends Controller
             abort(404);
         }
 
-    $base64Image = base64_encode($image);
+        $file = File::get($path);
+        $type = File::mimeType($path);
 
-    /*return response()->json([
-        'image' => 'data:image/png;base64,' . $base64Image,
+        $response = Response::make($file, 200);
+        $response->header('Content-Type', $type);
 
         return $response;
     }
