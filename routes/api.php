@@ -70,6 +70,7 @@ Route::group([
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
+    Route::get('getActivityInRegion',[ActivityController::class, 'getActivityInRegion']);
 
 });
 
@@ -101,28 +102,26 @@ Route::group([
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
     Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
-
+    Route::get('getActivityInRegion',[ActivityController::class, 'getActivityInRegion']);
+    Route::post('comment',[CommentController::class, 'store']);
+    Route::post('getComment',[CommentController::class, 'list']);
 });
 
-
-
-Route::get('profile',function(){
-    return 'unautheantic user ';
-})->name('login');
 
 Route::middleware('auth:api')->group(function ()
     {
         Route::post('logout',[AdminAuthController::class,'logout']);
        Route::post('updateprofile',[RegisterController::class,'updateProfile']);
        Route::get('getweather/{city}',[WeatherController::class, 'getWeatherData']);
-       Route::post('comment/{activity_id}',[CommentController::class, 'store']);
+       Route::post('comment',[CommentController::class, 'store']);
        Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
-       Route::get('activity/{activity_id}/comments',[CommentController::class, 'list']);
+       Route::post('getComment',[CommentController::class, 'list']);
        Route::post('addrate',[RateController::class, 'SetRate']);
        Route::get('toprated',[RateController::class, 'GetTopRated']);
        Route::get('bookmarked',[BookmarkController::class, 'GetBookmarks']);
        Route::post('addbookamrk',[BookmarkController::class, 'AddBookmark']);
        Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
+       Route::get('getActivityInRegion',[ActivityController::class, 'getActivityInRegion']);
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
        Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);

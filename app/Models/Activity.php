@@ -55,4 +55,5 @@ class Activity extends Model
     {
         return $this->belongsTo(Guide::class);
     }
+
 }

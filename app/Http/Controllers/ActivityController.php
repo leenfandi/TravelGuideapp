@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Admin;
 use App\Models\City;
+use App\Models\Comment;
 use App\Models\Guide;
 use App\Models\Image;
 use App\Models\Rate;
@@ -85,7 +86,36 @@ class ActivityController extends Controller
 
     }
 
+    public function getActivityInRegion (Request $request)
+    {
+        $activities = Activity::where("region_id" , $request->region_id)->get();
+    
+        foreach($activities as $activity )
+        {
+            $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
+            $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
+            $activity->region = Region::where('id'  ,$activity->region_id)->first();
+            $activity->city = City::where('id' , $activity->region->city_id)->first();
+            $activity->comments= Comment::where('activities_id', '=', $activity->id)->count();
 
+            if($activity->admin_id != null){
+                $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
+                $activity->user->image = null;
+                $activity->user->type = 'admin';
+            }
+            if($activity->guide_id != null){
+                $activity->user = Guide::select('id' , 'name' , 'image')->where('id' , $activity->guide_id)->first();
+                $activity->user->type = 'guide';
+            }
+        }
+    
+         return response()->json([
+            'message'=>'activities in region',
+            'data'=>$activities,
+    
+        ],201);
+    }
+    
 
 public function GetNearbyByLocation (Request $request)
 {
@@ -96,13 +126,14 @@ public function GetNearbyByLocation (Request $request)
                         ->where('latitude' , '<' , $latitude + $radius)
                         ->where('longitude' , '>' , $longitude - $radius)
                         ->where('longitude' , '<' , $longitude + $radius)->get();
-
     foreach($activities as $activity )
     {
         $activity->rating = round(Rate::where('activity_id' , $activity->id)->avg('rate'),1);
         $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
+        $activity->comments= Comment::where('activities_id', '=', $activity->id)->count();
+
         if($activity->admin_id != null){
             $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
             $activity->user->image = null;
@@ -135,9 +166,24 @@ public function addCity (Request $request)
 
 public function addRegion (Request $request)
 {
+
+    $validator =Validator::make($request->all(),[
+        'city_id'=>'required',
+        'name'=>'required',
+        'latitude' => 'required' ,
+        'longitude' => 'required' ,
+    ]);
+
+    if ($validator->fails())
+    {
+        return response()->json($validator->errors()->toJson(),400);
+    }
+
     $region = Region::create([
         'city_id' => $request->city_id ,
-        'name' => $request->name
+        'name' => $request->name,
+        'latitude' => $request->latitude,
+        'longitude' => $request->name
     ]);
     if($request->has('images')){
         $images = [];
@@ -168,25 +214,22 @@ public function GetAllCities()
 
 public function GetAllRegions()
 {
-    $regions = Region::with("city")->get();
-
+    $regions = Region::get();
     foreach($regions as $region){
         $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
-        }
+    }
 
     return response()->json([
-        'message'=>'All regions',
+        'message'=>'Regions in the city',
         'data' => $regions
-
     ],200);
 }
 
 public function GetRegionsInCity (Request $request)
 {
     $regions = Region::where('city_id' , $request->city_id)->get();
-
     foreach($regions as $region){
-    $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
+        $region->images = Region_Image::select('url')->where('region_id' , $region->id)->get();
     }
 
     return response()->json([
@@ -223,6 +266,7 @@ public function getallactivities()
         $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
+        $activity->comments= Comment::where('activities_id', '=', $activity->id)->count();
         if($activity->admin_id != null){
             $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
             $activity->user->image = null;
@@ -249,6 +293,8 @@ public function getallactivities()
             $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
             $activity->region = Region::where('id'  ,$activity->region_id)->first();
             $activity->city = City::where('id' , $activity->region->city_id)->first();
+            $activity->comment_count = Comment::where('activity_id', '=', $activity->id)->count();
+
         }
 
         return response()->json([

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
 use App\Models\City;
+use App\Models\Comment;
 use App\Models\Region;
 use App\Models\Region_Image;
 use App\Models\User;
@@ -96,6 +97,7 @@ class RateController extends Controller
         $activity->urls = Image::select('url')->where('activity_id', $activity->id)->orderBy('id', 'desc')->get();
         $activity->region = Region::where('id'  ,$activity->region_id)->first();
         $activity->city = City::where('id' , $activity->region->city_id)->first();
+        $activity->comments = Comment::where('activities_id' , $activity->id)->count();
         if($activity->admin_id != null){
             $activity->user = Admin::select('id' , 'name' )->where('id' , $activity->admin_id)->first();
             $activity->user->image = null;

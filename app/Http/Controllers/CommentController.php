@@ -5,19 +5,31 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Models\Activity;
 use App\Models\Guide;
-use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
     //for user
-    public function list($activity_id)
+    public function list(Request $request)
     {
-        $activity = Activity::where('id', $activity_id)->first();
+        $activity = Activity::where('id', $request->activity_id)->first();
         if ($activity) {
-            $comments=Comment::with(['user'])->where('activities_id',$activity_id)
-            ->orderBy('id','desc')->get();
+            $comments=Comment::where('activities_id',$request->activity_id)
+            ->get();
+            foreach($comments as $comment)
+            {
+                if($comment->user_id != null)
+                {
+                    $comment->user= User::select('id' ,'name' , 'image')->where('id' , $comment->user_id)->first();
+                    $comment->user->type = "user" ;
+                }
+                if($comment->guide_id != null)
+                {
+                    $comment->user= Guide::select('id' , 'name' , 'image')->where('id' , $comment->guide_id)->first();
+                    $comment->user->type = "guide" ;
+                }
+            }
 
 
                 return response()->json([
@@ -38,41 +50,77 @@ class CommentController extends Controller
 
     }
     //for user
-    public function store($activity_id, Request $request)
-    {
-        $user_id= Auth::guard('api')->user()->id;
-        $activity = Activity::where('id', $activity_id)->get()->first();
-        if ($activity) {
-            $validator = validator($request->all(), [
-
-                'message' => 'required',
-
-
-
+    public function store(Request $request)
+    {   
+        if(Auth::guard('api')->user() != null){
+            $user = Auth::guard('api')->user();
+            $user_id = $user->id;
+            $activity = Activity::where('id', $request->activity_id)->get()->first();
+            if ($activity) {
+                $validator = validator($request->all(), [
+                    'message' => 'required',
+                ]);
+            }
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation errors',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            $comment = Comment::create([
+                'message' => $request->message,
+                'activities_id' => $request->activity_id,
+                'user_id' => $user->id,
             ]);
-        }
-        if ($validator->fails()) {
+            $comment->user = [
+                "image" => $user->image,
+                "name" => $user->name,
+                "id" => $user->id,
+                "type" => "user"
+            ];
+    
             return response()->json([
-                'message' => 'Validation errors',
-                'errors' => $validator->errors()
-            ], 422);
+                'message'=>'comment added',
+                'data'=>$comment ,
+    
+            ],200);
         }
-        $comment = Comment::create([
-            'message' => $request->message,
-            'activities_id' => $activity_id,
-            'user_id' => Auth::guard('api')->id(),
-
-        ]);
-
-
+        else if(Auth::guard('guide-api')->user() != null){
+            $user = Auth::guard('guide-api')->user() ;
+            $user_id = $user->id;
+            $activity = Activity::where('id', $request->activity_id)->get()->first();
+            if ($activity) {
+                $validator = validator($request->all(), [
+                    'message' => 'required',
+                ]);
+            }
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation errors',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+            $comment = Comment::create([
+                'message' => $request->message,
+                'activities_id' => $request->activity_id, 
+                'guide_id' => $user->id,
+            ]);
+            $comment->user = [
+                "image" => $user->image,
+                "name" => $user->name,
+                "id" => $user->id,
+                "type" => "user"
+            ];
+    
+            return response()->json([
+                'message'=>'comment added',
+                'data'=>$comment ,
+    
+            ],200);
+        }
         return response()->json([
-            'message'=>'comment added',
-            'name'=>$comment->user->name,
-            'data'=>$comment ,
-
-        ],200);
-
-
+            'message' => 'error while adding comment'
+        ], 400);
     }
     //for guide
     public function storecomment($activity_id, Request $request)
