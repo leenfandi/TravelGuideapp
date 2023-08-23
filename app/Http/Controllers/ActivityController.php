@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Admin;
+use App\Models\Bookmark;
 use App\Models\City;
 use App\Models\Comment;
 use App\Models\Guide;
@@ -102,6 +103,24 @@ class ActivityController extends Controller
                 $activity->user = Guide::select('id', 'name', 'image')->where('id', $activity->guide_id)->first();
                 $activity->user->type = 'guide';
             }
+            if (Auth::guard('guide-api')->user()) {
+                $user =  (Auth::guard('guide-api')->user());
+                $bookmark = Bookmark::where('guide_id', $user->id)->where('activity_id', $activity->id)->first();
+                if ($bookmark) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
+            } else  if (Auth::guard('api')->user()) {
+                $user =  (Auth::guard('api')->user());
+                $bookmark = Bookmark::where('user_id', $user->id)->where('activity_id', $activity->id)->first();
+                
+            if ($bookmark) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
+            }
         }
 
         return response()->json([
@@ -147,6 +166,23 @@ class ActivityController extends Controller
             if ($activity->guide_id != null) {
                 $activity->user = Guide::select('id', 'name', 'image')->where('id', $activity->guide_id)->first();
                 $activity->user->type = 'guide';
+            }
+            if (Auth::guard('guide-api')->user()) {
+                $user =  (Auth::guard('guide-api')->user());
+                $bookmark = Bookmark::where('guide_id', $user->id)->where('activity_id', $activity->id)->first();
+                if ($bookmark != null) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
+            } else if (Auth::guard('api')->user()) {
+                $user =  (Auth::guard('api')->user());
+                $bookmark = Bookmark::where('user_id', $user->id)->where('activity_id', $activity->id)->first();
+                if ($bookmark != null) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
             }
         }
 
@@ -278,6 +314,23 @@ class ActivityController extends Controller
             if ($activity->guide_id != null) {
                 $activity->user = Guide::select('id', 'name', 'image')->where('id', $activity->guide_id)->first();
                 $activity->user->type = 'guide';
+            }
+            if (Auth::guard('guide-api')->user() != null) {
+                $user =  (Auth::guard('guide-api')->user());
+                $bookmark = Bookmark::where('guide_id', $user->id)->where('activity_id', $activity->id)->first();
+                if ($bookmark != null) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
+            } else  if (Auth::guard('api')->user() != null) {
+                $user =  (Auth::guard('api')->user());
+                $bookmark = Bookmark::where('user_id', $user->id)->where('activity_id', $activity->id)->first();
+                if ($bookmark != null) {
+                    $activity->bookmarked = true;
+                } else {
+                    $activity->bookmarked = false;
+                }
             }
         }
 

@@ -87,7 +87,7 @@ Route::group([
     Route::post('getUserFromList',[ActivityController::class,'getUsersByIds']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
     Route::post('addrate',[RateController::class, 'SetRateForGuide']);
-    Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
+    Route::post('addbookamrk',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
     Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);

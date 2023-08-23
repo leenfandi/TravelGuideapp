@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
+use App\Models\Bookmark;
 use App\Models\City;
 use App\Models\Comment;
 use App\Models\Region;
@@ -99,6 +100,25 @@ class RateController extends Controller
             if ($activity->guide_id != null) {
                 $activity->user = Guide::select('id', 'name', 'image')->where('id', $activity->guide_id)->first();
                 $activity->user->type = 'guide';
+            }
+            if (Auth::guard('guide-api')->user()) {
+                $user =  (Auth::guard('guide-api')->user()) ;
+                $bookmark = Bookmark::where('guide_id', $user->id)->where('activity_id', $activity->id)->first();
+                if($bookmark != null){
+                    $activity->bookmarked = true ;
+                }
+                else {
+                    $activity->bookmarked = false;
+                }
+            }else if (Auth::guard('api')->user()) {
+                $user =  (Auth::guard('api')->user()) ;
+                $bookmark = Bookmark::where('user_id', $user->id)->where('activity_id', $activity->id)->first();
+                if($bookmark != null){
+                    $activity->bookmarked = true ;
+                }
+                else {
+                    $activity->bookmarked = false;
+                }
             }
         }
 
