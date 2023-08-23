@@ -84,6 +84,7 @@ Route::group([
     Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
     Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
     Route::post('addimages',[ImageController::class,'AddImages']);
+    Route::post('getUserFromList',[ActivityController::class,'getUsersByIds']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);
     Route::post('addrate',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk/{activity_id}',[BookmarkController::class, 'AddBookmarkForGuide']);
