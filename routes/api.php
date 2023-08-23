@@ -58,8 +58,8 @@ Route::group([
     Route::post('getactivity',[ImageController::class, 'get_Activity_With_Image']);
     Route::get('get_all_guides',[AdminAuthController::class,'getProfile_of_guides']);
     Route::get('get_all_users',[AdminAuthController::class,'getProfile_of_users']);
-    Route::delete('delete_any_guide/{id}',[AdminAuthController::class,'delete_any_guide']);
-    Route::delete('delete_any_user/{id}',[AdminAuthController::class,'delete_any_user']);
+    Route::post('delete_any_guide',[AdminAuthController::class,'delete_any_guide']);
+    Route::post('delete_any_user',[AdminAuthController::class,'delete_any_user']);
     Route::get('getactivity',[ActivityController::class,'getallactivities']);
     Route::post('addcity',[ActivityController::class, 'addCity']);
     Route::post('addregion',[ActivityController::class, 'addRegion']);
@@ -71,7 +71,7 @@ Route::group([
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
     Route::get('getActivityInRegion',[ActivityController::class, 'getActivityInRegion']);
-
+    Route::post('getComment',[CommentController::class, 'list']);
 });
 
 
@@ -81,8 +81,6 @@ Route::group([
 
 ], function () {
     Route::post('logout',[AdminAuthController::class,'logout']);
-    Route::post('addcomment/{activity_id}',[CommentController::class, 'storecomment']);
-    Route::get('showcomment/{activity_id}',[CommentController::class, 'showcomment']);
     Route::post('addimages',[ImageController::class,'AddImages']);
     Route::post('getUserFromList',[ActivityController::class,'getUsersByIds']);
     Route::post('addactivity',[ActivityController::class,'AddActivity']);

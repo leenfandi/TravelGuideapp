@@ -115,7 +115,7 @@ class ActivityController extends Controller
                 $user =  (Auth::guard('api')->user());
                 $bookmark = Bookmark::where('user_id', $user->id)->where('activity_id', $activity->id)->first();
                 
-            if ($bookmark) {
+                if ($bookmark) {
                     $activity->bookmarked = true;
                 } else {
                     $activity->bookmarked = false;
