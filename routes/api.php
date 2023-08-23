@@ -87,7 +87,7 @@ Route::group([
     Route::post('addrate',[RateController::class, 'SetRateForGuide']);
     Route::post('addbookamrk',[BookmarkController::class, 'AddBookmarkForGuide']);
     Route::get('bookmarked',[BookmarkController::class, 'GetBookmarksForGuide']);
-    Route::post('search/{any_string_of_region}',[SearchController::class,'autocomplete_search']);
+    Route::post('search',[SearchController::class,'autocompletesearch']);
     Route::get('get_search_history',[SearchController::class, 'get_search_history_guide']);
     Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
     Route::get('toprated',[RateController::class, 'GetTopRated']);
@@ -122,7 +122,7 @@ Route::middleware('auth:api')->group(function ()
        Route::get('nearbylocation',[ActivityController::class, 'GetNearbyByLocation']);
        Route::get('getActivityInRegion',[ActivityController::class, 'getActivityInRegion']);
        Route::delete('deletecomment',[CommentController::class, 'deletecommentuser']);
-       Route::post('search/{any_string_of_region}',[SearchController::class,'autocompletesearch']);
+       Route::post('search',[SearchController::class,'autocompletesearch']);
        Route::get('get_search_history',[SearchController::class, 'get_search_history']);
        Route::post('rateaguide',[RateController::class, 'PutRateToGuide']);
        Route::get('topguides',[RateController::class, 'GetTopGuides']);
