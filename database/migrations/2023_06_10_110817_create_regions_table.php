@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('city_id');
             $table->string('name');
-            //$table->string('time');
-
+            $table->float('latitude');
+            $table->float('longitude');
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->timestamps();
         });

@@ -14,16 +14,9 @@ class Region extends Model
     protected $fillable = [
         'city_id' ,
         'name',
-
-
+        'latitude' ,
+        'longitude' ,
     ];
-
-        /**
-         * Get all of the user for the region
-         *
-         * @return \Illuminate\Database\Eloquent\Relations\HasMany
-         */
-
 
          public function city() : BelongsTo
          {

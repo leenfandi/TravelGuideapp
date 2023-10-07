@@ -27,7 +27,6 @@ class RegisterController extends Controller
             'name'=>'required',
             'email'=>'required|string|email|unique:users',
             'password'=>'required|min:8',
-            'number' => 'required|numeric' ,
             'image' => 'nullable',
 
         ]);
@@ -54,7 +53,8 @@ class RegisterController extends Controller
 
         return response()->json([
             'message'=>'Register successfully',
-            'access_token'=>$token
+            'access_token'=>$token,
+            'user'=>$user,
         ],201);
     }
     /**
@@ -62,28 +62,56 @@ class RegisterController extends Controller
      */
     public function login(Request $request)
     {
-     $validator =Validator::make($request->all(),[
+        $validator =Validator::make($request->all(),[
+            'email'=>'required|string|email',
+            'password'=>'required|string|min:8',
+        ]);
+        if ($validator->fails())
+        {
+            return response()->json($validator->errors()->toJson(),400);
+        }
+        $credentials=$request->only(['email','password']);
 
-         'email'=>'required|string|email',
-         'password'=>'required|string|min:8',
+        if($token = Auth::guard('api')->attempt($credentials))
+        {
+            $user = Auth::guard('api')->user();
 
-     ]);
-     if ($validator->fails())
-     {
-         return response()->json($validator->errors()->toJson(),422);
-     }
-     $credentials=$request->only(['email','password']);
-
-     if(!$token=Auth::guard('api')->attempt($credentials))
-     {
-       return response()->json(['error'=>'Unauthorized'],401);
-     }
-      User::where('email' , $request->email);
-     return response()->json([
-         'access_token'=>$token,
-         'user'=>Auth::guard('api')->user(),
-
-       ]);
+            return response()->json([
+                'access_token'=>$token,
+                'user'=> [
+                    "id" => $user->id,
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "image" => $user->image
+                ],                'type' => 0,
+            ]);
+        }else if($token = Auth::guard('guide-api')->attempt($credentials)){
+            $user = Auth::guard('guide-api')->user();
+            return response()->json([
+                'access_token'=>$token,
+                'user'=> [
+                    "id" => $user->id,
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "image" => $user->image
+                ],
+                'type' => 1,
+            ]);
+        }
+        else if($token = Auth::guard('admin-api')->attempt($credentials)){
+            $user = Auth::guard('admin-api')->user();
+            return response()->json([
+                'access_token'=>$token,
+                'user'=> [
+                    "id" => $user->id,
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "image" => $user->image
+                ],
+                'type' => 2,
+            ]);
+        }
+        return response()->json(["message" => "error while logging in"],400);
     }
     /**
      * Get the authenticated User.
@@ -99,9 +127,9 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-   public function logout()
+   public function logout(Request $request)
     {
-        Auth::guard('api')->logout();
+        $request->user()->logout();
         return response()->json(['message' => 'Successfully logged out']);
     }
 
