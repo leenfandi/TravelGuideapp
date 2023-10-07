@@ -91,6 +91,23 @@ class User extends Authenticatable implements JWTSubject
       {
         return $this->hasMany(Guide_Rates::class);
       }
-
+/**
+ * Get all of the comments for the User
+ *
+ * @return \Illuminate\Database\Eloquent\Relations\HasMany
+ */
+public function chats(): HasMany
+{
+    return $this->hasMany(Chat::class, 'created_by');
+}
+/**
+ * Get all of thn participant for the User
+ *
+ * @return \Illuminate\DatabChatParticipantquent\Relations\HasMany
+ */
+public function participant(): HasMany
+{
+    return $this->hasMany(ChatParticipant::class);
+}
     }
 

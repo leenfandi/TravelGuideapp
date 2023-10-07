@@ -11,6 +11,7 @@ use App\Http\Controllers\GuideAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\ChatController;
 
 use App\Http\Controllers\SearchController;
 /*
@@ -80,16 +81,16 @@ Route::group([
     Route::get('getregions',[ActivityController::class,'GetAllRegions']);
     Route::post('getregionsincity',[ActivityController::class,'GetRegionsInCity']);
     Route::get('getallregionsinallcities',[ActivityController::class,'GetEverything']);
-<<<<<<< HEAD
+// HEAD
     Route::get('getguide/{guide_id}',[AdminAuthController::class,'getguide']);
     Route::get('getuser/{user_id}',[AdminAuthController::class,'getuser']);
-   
-=======
+
+//=======
     Route::post('getguide',[AdminAuthController::class,'getguide']);
     Route::post('getuser',[AdminAuthController::class,'getuser']);
     Route::post('getguideactivities',[ActivityController::class,'GetGuideActivities']);
 
->>>>>>> 560ffd6deb74c9987447a0b8ae8eb2f66397e9b8
+//>>>>>>> 560ffd6deb74c9987447a0b8ae8eb2f66397e9b8
 });
 
 
@@ -156,5 +157,6 @@ Route::middleware('auth:api')->group(function ()
 
        Route::post('change_password',[RegisterController::class,'changePassword']);
        Route::delete('deletemyaccount',[RegisterController::class,'DeleteMyAccount']);
+       Route::apiResource('chat',ChatController::class)->only(['indexmessage','showmessage', 'store']);
 
     });

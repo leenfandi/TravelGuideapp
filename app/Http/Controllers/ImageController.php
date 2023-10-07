@@ -96,9 +96,10 @@ class ImageController extends Controller
         'image' => 'data:image/png;base64,' . $base64Image,
 
         return $response;
+    }*/
     }
-    }
 
 
 
 
+}
